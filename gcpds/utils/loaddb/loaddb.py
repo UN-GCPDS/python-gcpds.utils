@@ -143,11 +143,8 @@ class GIGA:
         return rst
 
     # ----------------------------------------------------------------------
-
     def mne_epochs(self, **kwargs):
         """"""
-    #     reject=None, flat=None, reject_tmin=None, reject_tmax=None, baseline=None, proj=True, on_missing='error', metadata=None, selection=None, verbose=None
-
         info = mne.create_info(self.channels, sfreq=self.fs, ch_types="eeg")
         info.set_montage('standard_1020')
 
@@ -236,10 +233,8 @@ class BCI2a:
     # ----------------------------------------------------------------------
     def mne_epochs(self, **kwargs):
         """"""
-    #     reject=None, flat=None, reject_tmin=None, reject_tmax=None, baseline=None, proj=True, on_missing='error', metadata=None, selection=None, verbose=None
-
         info = mne.create_info(self.channels, sfreq=self.fs, ch_types="eeg")
-        info.set_montage(self.montage)
+        info.set_montage('standard_1020')
 
         data, classes = self.get_all_runs()
 
@@ -248,16 +243,6 @@ class BCI2a:
 
         return mne.EpochsArray(data, info, events=events, tmin=-2,
                                event_id=event_id, **kwargs)
-
-    # ----------------------------------------------------------------------
-    def mne_raw(self):
-        """"""
-        info = mne.create_info(self.channels, sfreq=self.fs, ch_types="eeg")
-        info.set_montage('standard_1020')
-
-        data, classes = self.get_all_runs()
-
-        return mne.io.RawArray(data[0], info)
 
 
 ########################################################################
@@ -311,12 +296,16 @@ class GIGA_Laplacian:
 
         return run, np.concatenate(classes)
 
-    # # ----------------------------------------------------------------------
-    # def resting(self, channels='All'):
-        # """"""
-        # rst = self.data[1]
+    # ----------------------------------------------------------------------
+    def mne_epochs(self, **kwargs):
+        """"""
+        info = mne.create_info(self.channels, sfreq=self.fs, ch_types="eeg")
+        info.set_montage('standard_1020')
 
-        # if channels != 'All':
-            # rst = rst[[self.channels.index(ch) for ch in channels]]
+        data, classes = self.get_all_runs()
 
-        # return rst
+        events = [[i, 1, cls] for i, cls in enumerate(classes)]
+        event_id = {e: i for i, e in enumerate(self.classes)}
+
+        return mne.EpochsArray(data, info, events=events, tmin=-2,
+                               event_id=event_id, **kwargs)
