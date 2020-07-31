@@ -15,7 +15,7 @@ from abc import ABCMeta, abstractmethod
 import logging
 
 DEFAULT_FS = 250
-LOG_SPACE = np.logspace(np.log10(10), np.log10(16000), 1000)
+LOG_SPACE = np.logspace(np.log10(10), np.log10(16000), 2**15)
 
 
 ########################################################################
@@ -23,8 +23,8 @@ class Filter(metaclass=ABCMeta):
     """Generic filter."""
 
     # ----------------------------------------------------------------------
-    # def __call__(self, eeg, /, axis=None, timestamp=None, fs=None, padtype='even', padlen=None, method='pad', irlen=None):
-    def __call__(self, eeg, axis=None, timestamp=None, fs=None, padtype='even', padlen=None, method='pad', irlen=None):
+    # def __call__(self, eeg, /, axis=-1, timestamp=None, fs=None, padtype='even', padlen=None, method='pad', irlen=None):
+    def __call__(self, eeg, axis=-1, timestamp=None, fs=None, padtype='even', padlen=None, method='pad', irlen=None):
         """
         Apply a digital filter forward and backward to a signal.
 
