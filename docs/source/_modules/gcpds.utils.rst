@@ -6,11 +6,20 @@ gcpds.utils package
    :no-undoc-members:
    :no-show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   gcpds.utils.loaddb
+
 Submodules
 ----------
 
 .. toctree::
    :maxdepth: 4
 
+   gcpds.utils.colab
    gcpds.utils.filters
-   gcpds.utils.loaddb
+   gcpds.utils.visualizations

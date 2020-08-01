@@ -9,6 +9,8 @@ Navigation
    :name: mastertoc
 
    _notebooks/01-utils
+   _notebooks/02-visualizations
+   _notebooks/03-mne_integrations
 
 
 Indices and tables
