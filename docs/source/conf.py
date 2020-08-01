@@ -107,6 +107,8 @@ autodoc_mock_imports = [
     'IPython',
     'numpy',
     'scipy',
+    'mne',
+    'matplotlib'
     # 'base_server.WSHandler_Serial',
     # 'base_server.WSHandler_WiFi',
     # 'ws.base_server',
