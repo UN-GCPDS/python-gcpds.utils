@@ -85,7 +85,7 @@ class GIGA:
         self.runs = self.data[9][0][0] // 20
 
     # ----------------------------------------------------------------------:
-    def get_run(self, run: int, class_: Optional[list] = None, channels: Optional[list] = 'All') -> Tuple[np.ndarray, np.ndarray]:
+    def get_run(self, run: int, class_: Optional[list] = None, channels: Optional[list] = 'All', centralize: Optional[bool] = False) -> Tuple[np.ndarray, np.ndarray]:
         """"""
 
         starts = np.where(self.data[11][0] == 1)[0]
@@ -117,16 +117,19 @@ class GIGA:
             run = run[:, [self.channels.index(ch) for ch in channels], :]
 
         # run = np.moveaxis(run, 1, 0)
-        # run = run - run.mean(axis=2)[..., np.newaxis]
+        if centralize:
+            run = run - run.mean(axis=2)[..., np.newaxis]
 
         return run, np.concatenate(classes)
 
     # ----------------------------------------------------------------------
-    def get_all_runs(self, class_: Optional[int] = None, channels: Optional[list] = 'All') -> Tuple[np.ndarray, np.ndarray]:
+    def get_all_runs(self, class_: Optional[int] = None, channels: Optional[list] = 'All', centralize: Optional[bool] = False) -> Tuple[np.ndarray, np.ndarray]:
         """"""
-        r, c = self.get_run(0, class_=class_, channels=channels)
+        r, c = self.get_run(
+            0, class_=class_, channels=channels, centralize=centralize)
         for run in range(1, self.runs):
-            r_, c_ = self.get_run(run, class_=class_, channels=channels)
+            r_, c_ = self.get_run(run, class_=class_,
+                                  channels=channels, centralize=centralize)
             r = np.concatenate([r, r_], axis=0)
             c = np.concatenate([c, c_])
 
@@ -143,15 +146,15 @@ class GIGA:
         return rst
 
     # ----------------------------------------------------------------------
-    def mne_epochs(self, run='all', **kwargs):
+    def mne_epochs(self, run='all', centralize: Optional[bool] = False, **kwargs):
         """"""
         info = mne.create_info(self.channels, sfreq=self.fs, ch_types="eeg")
         info.set_montage('standard_1020')
 
         if run == 'all':
-            data, classes = self.get_all_runs()
+            data, classes = self.get_all_runs(centralize=centralize)
         else:
-            data, classes = self.get_run(run)
+            data, classes = self.get_run(run, centralize=centralize)
 
         events = [[i, 1, cls] for i, cls in enumerate(classes)]
         event_id = {e: i for i, e in enumerate(self.classes)}
@@ -192,7 +195,7 @@ class BCI2a:
 
     # ----------------------------------------------------------------------
     # def get_run(self, run, /, eog=False, class_=None, channels='All'):
-    def get_run(self, run: int, class_: Optional[list] = None, channels: Optional[list] = 'All') -> Tuple[np.ndarray, np.ndarray]:
+    def get_run(self, run: int, class_: Optional[list] = None, channels: Optional[list] = 'All', centralize: Optional[bool] = False) -> Tuple[np.ndarray, np.ndarray]:
         """"""
         # fs = self.data[3 + run][0][0][3][0][0]
         classes = [i[0] for i in self.data[3 + run][0][0][2]]
@@ -207,7 +210,8 @@ class BCI2a:
             run = run[:, :, [self.channels.index(ch) for ch in channels]]
 
         run = np.moveaxis(run, 2, 1)
-        # run = run - run.mean(axis=2)[..., np.newaxis]
+        if centralize:
+            run = run - run.mean(axis=2)[..., np.newaxis]
 
         if class_ is None:
             class_ = range(len(self.classes))
@@ -221,28 +225,29 @@ class BCI2a:
         return run[np.concatenate(idx), :, :], np.concatenate(c)
 
     # ----------------------------------------------------------------------
-    def get_all_runs(self, class_: Optional[list] = None, channels: Optional[list] = 'All') -> Tuple[np.ndarray, np.ndarray]:
+    def get_all_runs(self, class_: Optional[list] = None, channels: Optional[list] = 'All', centralize: Optional[bool] = False) -> Tuple[np.ndarray, np.ndarray]:
         """"""
 
-        r, c = self.get_run(0, class_=class_, channels=channels)
+        r, c = self.get_run(
+            0, class_=class_, channels=channels, centralize=centralize)
         for run in range(1, self.runs):
             r_, c_ = self.get_run(
-                run, class_=class_, channels=channels)
+                run, class_=class_, channels=channels, centralize=centralize)
             r = np.concatenate([r, r_], axis=0)
             c = np.concatenate([c, c_])
 
         return r, c
 
     # ----------------------------------------------------------------------
-    def mne_epochs(self, run='all', **kwargs):
+    def mne_epochs(self, run='all', centralize: Optional[bool] = False, **kwargs):
         """"""
         info = mne.create_info(self.channels, sfreq=self.fs, ch_types="eeg")
         info.set_montage('standard_1020')
 
         if run == 'all':
-            data, classes = self.get_all_runs()
+            data, classes = self.get_all_runs(centralize=centralize)
         else:
-            data, classes = self.get_run(run)
+            data, classes = self.get_run(run, centralize=centralize)
 
         events = [[i, 1, cls] for i, cls in enumerate(classes)]
         event_id = {e: i for i, e in enumerate(self.classes)}
@@ -276,7 +281,7 @@ class GIGA_Laplacian:
         self.runs = None
 
     # ----------------------------------------------------------------------
-    def get_all_runs(self, class_: Optional[list] = None, channels: Optional[list] = 'All') -> Tuple[np.ndarray, np.ndarray]:
+    def get_all_runs(self, class_: Optional[list] = None, channels: Optional[list] = 'All', centralize: Optional[bool] = False) -> Tuple[np.ndarray, np.ndarray]:
         """"""
         if class_ is None:
             class_ = range(len(self.classes))
@@ -296,22 +301,23 @@ class GIGA_Laplacian:
             run = run[:, [self.channels.index(ch) for ch in channels], :]
 
         # run = np.moveaxis(run, 1, 0)
-        # run = run - run.mean(axis=2)[..., np.newaxis]
+        if centralize:
+            run = run - run.mean(axis=2)[..., np.newaxis]
 
         run = run[:, :, 5:]
 
         return run, np.concatenate(classes)
 
     # ----------------------------------------------------------------------
-    def mne_epochs(self, run='all', **kwargs):
+    def mne_epochs(self, run='all', centralize: Optional[bool] = False, **kwargs):
         """"""
         info = mne.create_info(self.channels, sfreq=self.fs, ch_types="eeg")
         info.set_montage('standard_1020')
 
         if run == 'all':
-            data, classes = self.get_all_runs()
+            data, classes = self.get_all_runs(centralize=centralize)
         else:
-            data, classes = self.get_run(run)
+            data, classes = self.get_run(run, centralize=centralize)
 
         events = [[i, 1, cls] for i, cls in enumerate(classes)]
         event_id = {e: i for i, e in enumerate(self.classes)}
