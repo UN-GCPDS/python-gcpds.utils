@@ -143,12 +143,15 @@ class GIGA:
         return rst
 
     # ----------------------------------------------------------------------
-    def mne_epochs(self, **kwargs):
+    def mne_epochs(self, run='all', **kwargs):
         """"""
         info = mne.create_info(self.channels, sfreq=self.fs, ch_types="eeg")
         info.set_montage('standard_1020')
 
-        data, classes = self.get_all_runs()
+        if run == 'all':
+            data, classes = self.get_all_runs()
+        else:
+            data, classes = self.get_run(run)
 
         events = [[i, 1, cls] for i, cls in enumerate(classes)]
         event_id = {e: i for i, e in enumerate(self.classes)}
@@ -231,12 +234,15 @@ class BCI2a:
         return r, c
 
     # ----------------------------------------------------------------------
-    def mne_epochs(self, **kwargs):
+    def mne_epochs(self, run='all', **kwargs):
         """"""
         info = mne.create_info(self.channels, sfreq=self.fs, ch_types="eeg")
         info.set_montage('standard_1020')
 
-        data, classes = self.get_all_runs()
+        if run == 'all':
+            data, classes = self.get_all_runs()
+        else:
+            data, classes = self.get_run(run)
 
         events = [[i, 1, cls] for i, cls in enumerate(classes)]
         event_id = {e: i for i, e in enumerate(self.classes)}
@@ -297,12 +303,15 @@ class GIGA_Laplacian:
         return run, np.concatenate(classes)
 
     # ----------------------------------------------------------------------
-    def mne_epochs(self, **kwargs):
+    def mne_epochs(self, run='all', **kwargs):
         """"""
         info = mne.create_info(self.channels, sfreq=self.fs, ch_types="eeg")
         info.set_montage('standard_1020')
 
-        data, classes = self.get_all_runs()
+        if run == 'all':
+            data, classes = self.get_all_runs()
+        else:
+            data, classes = self.get_run(run)
 
         events = [[i, 1, cls] for i, cls in enumerate(classes)]
         event_id = {e: i for i, e in enumerate(self.classes)}
