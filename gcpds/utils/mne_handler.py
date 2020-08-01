@@ -11,7 +11,7 @@ def apply_along_epochs(func1d, epochs):
     new_fs = data.shape[2] / \
         (epochs_.get_data().shape[2] / epochs_.info['sfreq'])
     epochs_.resample(new_fs, npad='auto')
-    # epochs_._data = data.astype(epochs_._data.dtype)
-    epochs_._data = data - data.mean(axis=2)[..., np.newaxis]
+    epochs_._data = data
+    # epochs_._data = data - data.mean(axis=2)[..., np.newaxis]
 
     return epochs_
