@@ -22,4 +22,5 @@ Submodules
 
    gcpds.utils.colab
    gcpds.utils.filters
+   gcpds.utils.mne_handler
    gcpds.utils.visualizations

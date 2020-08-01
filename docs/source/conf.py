@@ -89,7 +89,7 @@ html_theme_options = {
 
 html_sidebars = {
     '**': [
-        # 'about.html',
+        'about.html',
         # 'globaltoc.html',
         'navigation.html',
         'relations.html',
@@ -108,7 +108,7 @@ autodoc_mock_imports = [
     'numpy',
     'scipy',
     'mne',
-    'matplotlib'
+    'matplotlib',
     # 'base_server.WSHandler_Serial',
     # 'base_server.WSHandler_WiFi',
     # 'ws.base_server',
