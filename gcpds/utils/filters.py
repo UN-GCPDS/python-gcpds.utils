@@ -294,6 +294,6 @@ def compile_filters(FS):
     impedance = GenericButterBand(f0=31.2 - f, f1=31.2 + f, fs=FS, N=5)
 
 
-# Precompile filter for 250 Hz
-compile_filters(DEFAULT_FS)
-logging.info(f"Frequency sample is {DEFAULT_FS} Hz by default.")
+# # Precompile filter for 250 Hz
+# compile_filters(DEFAULT_FS)
+# logging.info(f"Frequency sample is {DEFAULT_FS} Hz by default.")
