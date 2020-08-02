@@ -12,12 +12,6 @@
     channels = db.channels
     fs = db.fs
 
-
-.. parsed-literal::
-
-    INFO:root:All filter were precompiled using 250.00 Hz as sampling frequency by default.
-
-
 Visualizations
 ==============
 
