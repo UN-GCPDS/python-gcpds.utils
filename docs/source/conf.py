@@ -120,8 +120,8 @@ autodoc_mock_imports = [
 
 todo_include_todos = True
 
-html_logo = '_static/logo.svg'
-html_favicon = '_static/favico.ico'
+# html_logo = '_static/logo.svg'
+# html_favicon = '_static/favico.ico'
 
 
 def setup(app):
