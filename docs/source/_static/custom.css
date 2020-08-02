@@ -92,6 +92,8 @@ dl:not(.docutils) dl dt {
     /*margin-top: 10px;*/
 /*}*/
 
+
+.body > .code.ipython3.highlight-default,
 .body > .highlight-ipython3 {
     display: none;
 }
