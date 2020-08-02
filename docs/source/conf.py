@@ -92,7 +92,7 @@ html_theme_options = {
 
 html_sidebars = {
     '**': [
-        'about.html',
+        'sidebar.html',
         # 'globaltoc.html',
         'navigation.html',
         'relations.html',
