@@ -14,8 +14,11 @@ from datetime import datetime
 from abc import ABCMeta, abstractmethod
 import logging
 
-DEFAULT_FS = 250
+
 LOG_SPACE = np.logspace(np.log10(10), np.log10(16000), 2**15)
+
+# DEFAULT_FS = 250
+DEFAULT_FS = LOG_SPACE[abs(LOG_SPACE - 250).argmin()]
 
 
 ########################################################################
@@ -198,7 +201,8 @@ class GenericNotch(Filter):
             of the IIR filter.
         """
         if fs != DEFAULT_FS:
-            logging.info(f"Compiled `Notch` filter for {fs:0.2f} Hz")
+            logging.info(
+                f"Compiled `Notch` filter ({self.f0} Hz) for {fs:.2f} Hz")
         return signal.iirnotch(self.f0, self.Q, fs)
 
 
@@ -253,7 +257,8 @@ class GenericButterBand(Filter):
         """
 
         if fs != DEFAULT_FS:
-            logging.info(f"Compiled `Butter` filter for {fs:0.2f} Hz")
+            logging.info(
+                f"Compiled `Butter` filter ({self.f0}|{self.f1} Hz) for {fs:.2f} Hz")
         nyq = fs / 2
         return signal.butter(self.N, (self.f0 / nyq, self.f1 / nyq), 'bandpass')
 
@@ -294,6 +299,13 @@ def compile_filters(FS):
     impedance = GenericButterBand(f0=31.2 - f, f1=31.2 + f, fs=FS, N=5)
 
 
-# # Precompile filter for 250 Hz
-# compile_filters(DEFAULT_FS)
-# logging.info(f"Frequency sample is {DEFAULT_FS} Hz by default.")
+try:
+    # Precompile filter for 250 Hz
+    compile_filters(DEFAULT_FS)
+    logging.info(
+        f"All filter were precompiled using {DEFAULT_FS:.2f} Hz as sampling frequency by default.")
+except:
+    logging.warning(f"Must precompile the filters manually, running:")
+    logging.warning(
+        ">>> from gcpds.utils.filters import compile_filters\n>>>compile_filters(250)")
+    pass
