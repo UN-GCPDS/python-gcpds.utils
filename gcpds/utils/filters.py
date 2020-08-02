@@ -17,8 +17,10 @@ import logging
 
 LOG_SPACE = np.logspace(np.log10(10), np.log10(16000), 2**15)
 
-# DEFAULT_FS = 250
-DEFAULT_FS = LOG_SPACE[abs(LOG_SPACE - 250).argmin()]
+try:
+    DEFAULT_FS = LOG_SPACE[abs(LOG_SPACE - 250).argmin()]
+except:
+    DEFAULT_FS = 250
 
 
 ########################################################################

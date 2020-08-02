@@ -41,8 +41,8 @@ buildapi:
 	#jupyter nbconvert --to markdown source/_notebooks/readme.ipynb
 	#cp source/_notebooks/readme.rst ../README.rst
 
-	jupyter nbconvert --to markdown source/_notebooks/readme.ipynb
-	mv source/_notebooks/readme.md ../README.md
+	jupyter nbconvert --to markdown source/_notebooks/00-readme.ipynb
+	mv source/_notebooks/00-readme.md ../README.md
 
 	rm -f source/_notebooks/*.ipynb
 
