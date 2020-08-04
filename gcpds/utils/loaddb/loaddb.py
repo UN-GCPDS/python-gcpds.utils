@@ -177,7 +177,7 @@ class BCI2a:
             open(FIDS, 'rb'))['BCI2a'].keys())
         # self.subjects_count = len(self.subjects)
         self.fs = 250
-        # self.montage = 'standard_1020'
+        self.montage = 'standard_1020'
 
         # self.info = mne.create_info(self.channels, sfreq=self.fs, ch_types="eeg")
         # self.info.set_montage(self.m)
