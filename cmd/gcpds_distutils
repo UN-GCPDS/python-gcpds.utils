@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from gcpds.utils.distutils import Distutils
-import sys
+import os
 
-dst = os.path.abspath(sys.path[0])
-Distutils(dst)
+Distutils(os.getcwd())
