@@ -26,7 +26,7 @@ setup(
                       'jinja2',
                       'colorama',
                       'sphinx',
-
+                      'ipython',
 
                       ],
 
