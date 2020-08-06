@@ -22,6 +22,7 @@ setup(
                       'scipy',
                       'matplotlib',
                       'mne',
+                      'tables',
 
                       'jinja2',
                       'colorama',
