@@ -1,12 +1,11 @@
 
 .. include:: _notebooks/readme.rst
-www
 
 Navigation
 ^^^^^^^^^^
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :name: mastertoc
 
    _notebooks/01-databases

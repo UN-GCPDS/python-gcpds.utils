@@ -141,13 +141,12 @@ index = sorted(index)
 with open('index.rst', 'w') as file:
     file.write("""
 .. include:: _notebooks/readme.rst
-www
 
 Navigation
 ^^^^^^^^^^
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :name: mastertoc
 
    {index}

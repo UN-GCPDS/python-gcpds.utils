@@ -1,4 +1,4 @@
-GCPDS - Utils
+GCPDS - utils
 =============
 
 This package is a set of useful Python scripts for *Database handler*,

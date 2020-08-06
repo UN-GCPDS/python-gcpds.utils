@@ -1,7 +1,8 @@
 Databases handler
 =================
 
-``gcpds.utils.loaddb`` contains a handler to load databases.
+With ``gcpds.utils.loaddb`` is possible load databases, select classes
+and electrodes, remove artifacts and create epochs for MNE tools.
 
 .. code:: ipython3
 
@@ -30,7 +31,8 @@ argumment:
 
     db = loaddb.BCI2a('BCI2a_database')
 
-There is some common information for the database.
+There is some base information for the database in the object
+``metadata``
 
 .. code:: ipython3
 
@@ -48,6 +50,9 @@ There is some common information for the database.
     250
 
 
+Load Subject
+------------
+
 The data by subject can be accessed with:
 
 .. code:: ipython3
@@ -62,6 +67,9 @@ The data by subject can be accessed with:
 
 
 If the database does not exist or is corrupted, it will be downloaded.
+
+Load runs
+---------
 
 After load a subject and when available, the trials can be read by runs.
 
@@ -80,7 +88,26 @@ After load a subject and when available, the trials can be read by runs.
 
 
 
-The run are sorted in ``trials x channels x time``
+Is possible to get all data for all available runs with ``get_data``:
+
+.. code:: ipython3
+
+    data, _ = db.get_data()
+    data.shape
+
+
+
+
+.. parsed-literal::
+
+    (288, 22, 1750)
+
+
+
+The EEG data are sorted in ``trials x channels x time``.
+
+Select classes and channels
+---------------------------
 
 Is possible to select the runs by ``channel`` and/or ``class``
 
@@ -116,3 +143,19 @@ The classes and the channels can be indexes instead of labels:
 
 
 The channels indexes, by convention, are 1-based array.
+
+--------------
+
+References
+~~~~~~~~~~
+
+-  Cho, H., Ahn, M., & Ahn, S. (2017). Supporting data for “EEG datasets
+   for motor imagery brain computer interface.”. GigaScience Database.
+-  Brunner, C., Leeb, R., Müller-Putz, G., Schlögl, A., & Pfurtscheller,
+   G. (2008). BCI Competition 2008–Graz data set A. Institute for
+   Knowledge Discovery (Laboratory of Brain-Computer Interfaces), Graz
+   University of Technology, 16.
+-  Schirrmeister, R. T., Springenberg, J. T., Fiederer, L. D. J.,
+   Glasstetter, M., Eggensperger, K., Tangermann, M., … & Ball, T.
+   (2017). Deep learning with convolutional neural networks for EEG
+   decoding and visualization. Human brain mapping, 38(11), 5391-5420.
