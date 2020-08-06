@@ -8,7 +8,6 @@ from typing import Union, Optional
 import numpy as np
 import json
 import mne
-import sys
 import tables
 import logging
 
@@ -62,8 +61,7 @@ class Database(metaclass=ABCMeta):
         filename_subject = self.metadata['subject_pattern'](subject)
 
         if filename_subject not in self.metadata['subject_files'].keys():
-            logging.warning(f"Subject {subject} not in list of subjects.")
-            sys.exit()
+            raise Exception(f"Subject {subject} not in list of subjects.")
 
         fid = self.metadata['subject_files'][filename_subject]
 
@@ -76,17 +74,14 @@ class Database(metaclass=ABCMeta):
     def get_run(self, run: int, classes: Union[int, str], channels=Union[int, str]) -> np.ndarray:
         """"""
         if run > self.runs:
-            logging.error(f'The current user only have {self.runs} runs.')
-            sys.exit()
+            raise Exception(f'The current user only have {self.runs} runs.')
 
         if isinstance(channels, (list, tuple)) and -1 in channels:
-            logging.warning('The channels are 1-based arrays')
-            sys.exit()
+            raise Exception('The channels are 1-based arrays')
 
         if isinstance(classes, (list, tuple)) and np.max(classes) >= len(self.metadata['classes']):
-            logging.warning(
+            raise Exception(
                 f"The class index {np.max(classes)} is out of range.")
-            sys.exit()
 
     # ----------------------------------------------------------------------
     def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL):
@@ -132,16 +127,29 @@ class Database(metaclass=ABCMeta):
         """"""
 
     # ----------------------------------------------------------------------
-    def mne_epochs(self, run=ALL, **kwargs):
+    def get_epochs(self, run=ALL, ** kwargs):
         """"""
+        # Remove channels that not correspond with the montage
+        montage = mne.channels.make_standard_montage(self.metadata['montage'])
+        channels_names = set(self.metadata['channel_names']).intersection(
+            set(montage.ch_names))
+        channels_missings = set(self.metadata['channel_names']).difference(
+            set(montage.ch_names))
+
+        logging.warning(
+            f"Missing {channels_missings} channels in {self.metadata['montage']} montage.\n"
+            f"Missing channels will be removed from MNE Epochs")
+
         info = mne.create_info(
-            self.metadata['channel_names'], sfreq=self.metadata['sampling_rate'], ch_types="eeg")
+            list(channels_names), sfreq=self.metadata['sampling_rate'], ch_types="eeg")
         info.set_montage(self.metadata['montage'])
 
         if run != ALL:
-            data, classes = self.get_run(run)
+            data, classes = self.get_run(
+                run, channels=list(channels_names))
         else:
-            data, classes = self.get_data(run)
+            data, classes = self.get_data(
+                run, channels=list(channels_names))
 
         events = [[i, 1, cls] for i, cls in enumerate(classes)]
         event_id = {e: i for i, e in enumerate(self.metadata['classes'])}
