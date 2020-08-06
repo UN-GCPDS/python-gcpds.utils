@@ -2,7 +2,7 @@ import os
 import shutil
 from jinja2 import Template
 import logging
-from colorama import Fore, Back, Style
+from colorama import Fore
 
 
 TEMPLATE_EXTENSION = '.j2'
@@ -55,9 +55,9 @@ documentation template preconfigured and 'CGPDS' as the namespace.""", end="\n\n
         maintainer = read(
             f'Maintainer', default=kwargs.get('MAINTAINER', author))
         maintainer_email = read(
-            f'Maintainer', default=kwargs.get('MAINTAINER_EMAIL', author_email))
+            f'Maintainer email', default=kwargs.get('MAINTAINER_EMAIL', author_email))
 
-        requieres = read(f'requieres (separated by comma)',
+        requieres = read(f'Requieres (separated by comma)',
                          default=kwargs.get('PKG_REQUIERES', None))
 
         self.data = {
