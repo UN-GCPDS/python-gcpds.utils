@@ -2,7 +2,7 @@ GCPDS - Utils
 =============
 
 This package is a set of useful Python scripts for *Database handler*,
-*EEG filtering* and *Data visualizations*
+*EEG filtering*, *Data visualizations* and *Package management*.
 
 Installation
 ------------

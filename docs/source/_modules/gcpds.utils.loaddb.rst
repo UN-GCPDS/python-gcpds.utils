@@ -12,5 +12,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   gcpds.utils.loaddb.base
+   gcpds.utils.loaddb.databases
    gcpds.utils.loaddb.google_drive_downloader
    gcpds.utils.loaddb.loaddb

@@ -11,14 +11,14 @@ To list the databases available
 
 .. code:: ipython3
 
-    loaddb.databases
+    loaddb.available_databases
 
 
 
 
 .. parsed-literal::
 
-    ['GIGA', 'BCI2a', 'GIGA_Laplacian']
+    ['GIGA', 'BCI2a', 'HighGamma']
 
 
 
@@ -34,18 +34,18 @@ There is some common information for the database.
 
 .. code:: ipython3
 
-    print(db.subjects_files)  # Filenames
-    print(db.channels)        # Channels names
-    print(db.fs)              # Sampling frequency
-    print(db.classes)         # Classes labels
+    print(db.metadata['channel_names'])
+    print(db.metadata['classes'])
+    print(db.metadata['montage'])
+    print(db.metadata['sampling_rate'])
 
 
 .. parsed-literal::
 
-    ['A01T.mat', 'A01E.mat', 'A09E.mat', 'A02T.mat', 'A04T.mat', 'A03E.mat', 'A02E.mat', 'A04E.mat', 'A03T.mat', 'A05T.mat', 'A05E.mat', 'A07T.mat', 'A07E.mat', 'A06E.mat', 'A08T.mat', 'A06T.mat', 'A09T.mat', 'A08E.mat']
     ['Fz', 'FC3', 'FC1', 'FCz', 'FC2', 'FC4', 'C5', 'C3', 'C1', 'Cz', 'C2', 'C4', 'C6', 'CP3', 'CP1', 'CPz', 'CP2', 'CP4', 'P1', 'Pz', 'P2', 'POz']
-    250
     ['left hand', 'right hand', 'feet', 'tongue']
+    standard_1020
+    250
 
 
 The data by subject can be accessed with:
@@ -82,12 +82,12 @@ After load a subject and when available, the trials can be read by runs.
 
 The run are sorted in ``trials x channels x time``
 
-Is possible to filter the runs by ``channel`` and/or ``class``
+Is possible to select the runs by ``channel`` and/or ``class``
 
 .. code:: ipython3
 
     # This will return the first two classes (left hand, right hand) for the channels C3 and C4
-    run, class_ = db.get_run(1, class_=[0, 1], channels=['C3', 'C4'])
+    run, class_ = db.get_run(1, classes=['left hand', 'right hand'], channels=['C3', 'C4'])
     run.shape, class_.shape
 
 
@@ -99,9 +99,11 @@ Is possible to filter the runs by ``channel`` and/or ``class``
 
 
 
+The classes and the channels can be indexes instead of labels:
+
 .. code:: ipython3
 
-    run, class_ = db.get_all_runs(class_=[0, 1], channels=['C3', 'Cz', 'C4'])
+    run, class_ = db.get_data(classes=[1, 3], channels=[1, 5, 10])
     run.shape, class_.shape
 
 
@@ -113,15 +115,4 @@ Is possible to filter the runs by ``channel`` and/or ``class``
 
 
 
---------------
-
-References
-~~~~~~~~~~
-
--  Cho, H., Ahn, M., Ahn, S., Kwon, M., & Jun, S. C. (2017). EEG
-   datasets for motor imagery brain–computer interface. GigaScience,
-   6(7), gix034.
--  Brunner, C., Leeb, R., Müller-Putz, G., Schlögl, A., & Pfurtscheller,
-   G. (2008). BCI Competition 2008–Graz data set A. Institute for
-   Knowledge Discovery (Laboratory of Brain-Computer Interfaces), Graz
-   University of Technology, 16.
+The channels indexes, by convention, are 1-based array.

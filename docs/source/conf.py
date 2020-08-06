@@ -18,8 +18,8 @@ sys.path.insert(0, os.path.abspath('exts'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'GCPDS'
-copyright = '2020, GCPDS'
+project = 'utils'
+copyright = '2020, GCPDS - utils'
 author = 'GCPDS'
 
 
@@ -126,3 +126,39 @@ todo_include_todos = True
 
 def setup(app):
     app.add_stylesheet("custom.css")
+
+
+notebooks = os.listdir(os.path.join(
+    os.path.abspath(os.path.dirname(__file__)), '_notebooks'))
+
+index = []
+for notebook in notebooks:
+    if notebook != 'readme.rst' and notebook.endswith('.rst'):
+        index.append(f"_notebooks/{notebook.replace('.rst', '')}")
+
+index = sorted(index)
+
+with open('index.rst', 'w') as file:
+    file.write("""
+.. include:: _notebooks/readme.rst
+www
+
+Navigation
+^^^^^^^^^^
+
+.. toctree::
+   :maxdepth: 1
+   :name: mastertoc
+
+   {index}
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+    """.format(index='\n   '.join(index)))

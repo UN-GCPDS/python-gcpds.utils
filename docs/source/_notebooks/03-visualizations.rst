@@ -9,8 +9,8 @@
     db.load_subject(1)
     data, classes = db.get_run(0)
     data = data[0]
-    channels = db.channels
-    fs = db.fs
+    channels = db.metadata['channel_names']
+    fs = db.metadata['sampling_rate']
 
 Visualizations
 ==============
@@ -55,6 +55,27 @@ EEG
 .. image:: 03-visualizations_files/03-visualizations_5_0.png
 
 
+.. code:: ipython3
+
+    db_g = loaddb.HighGamma('HighGamma')
+    db_g.load_subject(1)
+    data, classes = db_g.get_run(0)
+    data = data[0]
+    channels = db_g.metadata['channel_names']
+    fs = db_g.metadata['sampling_rate']
+    
+    plt.figure(figsize=(10, 30), dpi=90)
+    plt.tight_layout()
+    plt.title('Raw data')
+    plot_eeg(data, channels, fs, sca=1.5)
+    plt.ylim(-500, 68000)
+    plt.show()
+
+
+
+.. image:: 03-visualizations_files/03-visualizations_6_0.png
+
+
 Topoplot
 --------
 
@@ -65,12 +86,12 @@ Topoplot
 .. code:: ipython3
 
     plt.figure(figsize=(6, 6), dpi=90)
-    plot_topoplot(data.mean(axis=1), channels, fs, cmap='coolwarm')
+    plot_topoplot(data.mean(axis=1), channels, fs, cmap='coolwarm', montage='standard_1020')
     plt.show()
 
 
 
-.. image:: 03-visualizations_files/03-visualizations_8_0.png
+.. image:: 03-visualizations_files/03-visualizations_9_0.png
 
 
 .. code:: ipython3

@@ -11,18 +11,13 @@ EEG Filters
 
     from gcpds.utils import filters as flt
 
-
-.. parsed-literal::
-
-    INFO:root:All filter were precompiled using 250.00 Hz as sampling frequency by default.
-
-
 .. code:: ipython3
 
     db = loaddb.BCI2a('BCI2a_database')
     db.load_subject(1)
     run, _ = db.get_run(0)
-    trial = run[0,0][:db.fs]
+    fs = db.metadata['sampling_rate']
+    trial = run[0,0][:fs]
     trial.shape
 
 
@@ -43,7 +38,7 @@ and ``band550``
 
     plt.figure(figsize=(15, 11))
     
-    t = np.linspace(0, trial.shape[0]/db.fs, trial.shape[0])
+    t = np.linspace(0, trial.shape[0]/fs, trial.shape[0])
     
     plt.subplot(221)
     plt.title('Raw')
@@ -53,19 +48,19 @@ and ``band550``
     
     plt.subplot(222)
     plt.title('Beta')
-    plt.plot(t, flt.beta(trial, fs=250))
+    plt.plot(t, flt.beta(trial, fs=fs))
     plt.xlabel('Time [s]')
     plt.ylabel('Amplitude')
     
     plt.subplot(223)
     plt.title('Mu')
-    plt.plot(t, flt.mu(trial, fs=250))
+    plt.plot(t, flt.mu(trial, fs=fs))
     plt.xlabel('Time [s]')
     plt.ylabel('Amplitude')
     
     plt.subplot(224)
     plt.title('5-50 Hz')
-    plt.plot(t, flt.band550(trial, fs=250))
+    plt.plot(t, flt.band550(trial, fs=fs))
     plt.xlabel('Time [s]')
     plt.ylabel('Amplitude')
     
@@ -81,15 +76,8 @@ and ``GenericNotch``
 
 .. code:: ipython3
 
-    notch66 =  flt.GenericNotch(f0=66, fs=250)
-    band830 =  flt.GenericButterBand(f0=8, f1=30, fs=250)
-
-
-.. parsed-literal::
-
-    INFO:root:Compiled `Notch` filter (66 Hz) for 250.00 Hz
-    INFO:root:Compiled `Butter` filter (8|30 Hz) for 250.00 Hz
-
+    notch66 =  flt.GenericNotch(f0=66, fs=fs)
+    band830 =  flt.GenericButterBand(f0=8, f1=30, fs=fs)
 
 .. code:: ipython3
 
@@ -97,13 +85,13 @@ and ``GenericNotch``
     
     plt.subplot(121)
     plt.title('Notch 66 Hz')
-    plt.plot(t, notch66(trial, fs=250))
+    plt.plot(t, notch66(trial, fs=fs))
     plt.xlabel('Time [s]')
     plt.ylabel('Amplitude')
     
     plt.subplot(122)
     plt.title('3-30 Hz')
-    plt.plot(t, band830(trial, fs=250))
+    plt.plot(t, band830(trial, fs=fs))
     plt.xlabel('Time [s]')
     plt.ylabel('Amplitude')
     
@@ -123,27 +111,21 @@ rate.
     
     plt.subplot(121)
     plt.title('Notch 66 Hz')
-    plt.plot(t, notch66(trial, fs=512))
+    plt.plot(t, notch66(trial, fs=fs))
     plt.xlabel('Time [s]')
     plt.ylabel('Amplitude')
     
     plt.subplot(122)
     plt.title('3-30 Hz')
-    plt.plot(t, band830(trial, fs=512))
+    plt.plot(t, band830(trial, fs=fs))
     plt.xlabel('Time [s]')
     plt.ylabel('Amplitude')
     
     plt.show()
 
 
-.. parsed-literal::
 
-    INFO:root:Compiled `Notch` filter (66 Hz) for 512.01 Hz
-    INFO:root:Compiled `Butter` filter (8|30 Hz) for 512.01 Hz
-
-
-
-.. image:: 02-filters_files/02-filters_10_1.png
+.. image:: 02-filters_files/02-filters_10_0.png
 
 
 --------------

@@ -12,6 +12,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   gcpds.utils.distutils
    gcpds.utils.loaddb
 
 Submodules
