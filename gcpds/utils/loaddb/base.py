@@ -69,7 +69,7 @@ class Database(metaclass=ABCMeta):
 
         fid = self.metadata[f'subject_{mode}_files'][filename_subject]
 
-        self.runs = self.metadata['runs'][subject]
+        self.runs = self.metadata['runs'][subject - 1]
         # self.data = load_mat(self.path, filename_subject, fid)['eeg'][0][0]
         return load_mat(self.path, filename_subject, fid)
 
