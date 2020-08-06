@@ -19,8 +19,9 @@ class GIGA(Database):
     # ----------------------------------------------------------------------
     def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
         """"""
+        classes = self.format_class_selector(classes)
+        channels = self.format_channels_selectors(channels)
         super().get_run(run, classes, channels)
-        classes, channels = self.format_selectors(classes, channels)
 
         # Index of starts of all cues
         all_cues = np.where(self.data[11][0] == 1)[0]
@@ -47,6 +48,14 @@ class GIGA(Database):
 
         return run, np.array(classes_out)
 
+    # # ----------------------------------------------------------------------
+    # def resting(self, channels: Optional[list] = ALL) -> np.ndarray:
+        # """"""
+        # channels = self.format_channels_selectors(channels)
+        # resting = self.data[1]
+        # resting = resting[channels]
+        # return resting
+
 
 ########################################################################
 class BCI2a(Database):
@@ -62,8 +71,9 @@ class BCI2a(Database):
     # ----------------------------------------------------------------------
     def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
         """"""
+        classes = self.format_class_selector(classes)
+        channels = self.format_channels_selectors(channels)
         super().get_run(run, classes, channels)
-        classes, channels = self.format_selectors(classes, channels)
 
         classes_list = [i[0] for i in self.data[3 + run][0][0][2]]
         starts = [s[0] for s in self.data[3 + run][0][0][1]]
@@ -77,6 +87,45 @@ class BCI2a(Database):
         run = run[:, :, channels]
 
         run = np.moveaxis(run, 2, 1)
+
+        idx = []
+        c = []
+        for cls in classes:
+            idx.append(np.where(np.array(classes_list) == cls + 1)[0])
+            c.append([cls] * len(idx[-1]))
+
+        return run[np.concatenate(idx), :, :], np.concatenate(c)
+
+
+########################################################################
+class HighGamma(Database):
+    """"""
+    metadata = databases.highgamma
+
+    # ----------------------------------------------------------------------
+    def load_subject(self, subject: int) -> None:
+        """"""
+        data = super().load_subject(subject)
+        self.data = data.root
+
+    # ----------------------------------------------------------------------
+    def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
+        """"""
+        classes = self.format_class_selector(classes)
+        channels = self.format_channels_selectors(channels)
+        super().get_run(run, classes, channels)
+
+        classes_list = self.data.mrk.event.desc.read()[0]
+        cues = ((self.data.mrk.time.read() / 1000) * 500).T[0].astype(int)
+
+        start = np.int(
+            (self.metadata['sampling_rate'] * self.metadata['tmin']) - 1)
+        end = (self.metadata['sampling_rate'] * 2) + 1
+
+        data = np.concatenate(
+            [getattr(self.data, f"ch{ch+1}") for ch in channels])
+
+        run = np.array([data[:, cue + start:cue + end] for cue in cues])
 
         idx = []
         c = []

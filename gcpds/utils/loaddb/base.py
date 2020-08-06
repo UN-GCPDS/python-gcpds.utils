@@ -9,6 +9,8 @@ import numpy as np
 import json
 import mne
 import sys
+import tables
+import logging
 
 ALL = 'all'
 
@@ -26,6 +28,8 @@ def load_mat(path: str, mat: str, fid: str, overwrite: Optional[bool] = False) -
     if os.path.exists(filepath) and not overwrite:
         try:
             return loadmat(filepath)
+        except ValueError:
+            return tables.open_file(filepath, driver="H5FD_CORE")
         except:
             logging.warning('Corrupt database!!\n, overwriting...')
             return load_mat(path, mat, fid, overwrite=True)
@@ -75,7 +79,7 @@ class Database(metaclass=ABCMeta):
             logging.error(f'The current user only have {self.runs} runs.')
             sys.exit()
 
-        if isinstance(channels, (list, tuple)) and 0 in channels:
+        if isinstance(channels, (list, tuple)) and -1 in channels:
             logging.warning('The channels are 1-based arrays')
             sys.exit()
 
@@ -85,8 +89,8 @@ class Database(metaclass=ABCMeta):
             sys.exit()
 
     # ----------------------------------------------------------------------
-    def get_all_runs(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL):
-        """"""
+    def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL):
+        """Return all runs."""
         r, c = self.get_run(0, classes=classes, channels=channels)
         for run in range(1, self.runs):
             r_, c_ = self.get_run(run, classes=classes, channels=channels)
@@ -96,13 +100,13 @@ class Database(metaclass=ABCMeta):
         return r, c
 
     # ----------------------------------------------------------------------
-    def format_selectors(self, classes, channels):
-        """"""
-        if classes != ALL:
-            classes = [self.metadata['classes'].index(
-                cls) if isinstance(cls, str) else cls for cls in classes]
-        else:
-            classes = range(len(self.metadata['classes']))
+    def format_channels_selectors(self, channels=None):
+        """Generate the channels vector.
+
+        If no selector then all channels will be used, the channels cant be
+        indicated with the name or the index. If index is used this must be
+        1-based array.
+        """
 
         if channels != ALL:
             channels = [self.metadata['channel_names'].index(
@@ -110,7 +114,18 @@ class Database(metaclass=ABCMeta):
         else:
             channels = list(range(len(self.metadata['channel_names'])))
 
-        return classes, channels
+        return channels
+
+    # ----------------------------------------------------------------------
+    def format_class_selector(self, classes):
+        """"""
+        if classes != ALL:
+            classes = [self.metadata['classes'].index(
+                cls) if isinstance(cls, str) else cls for cls in classes]
+        else:
+            classes = range(len(self.metadata['classes']))
+
+        return classes
 
     # ----------------------------------------------------------------------
     def remove_artifacts(self):
@@ -126,7 +141,7 @@ class Database(metaclass=ABCMeta):
         if run != ALL:
             data, classes = self.get_run(run)
         else:
-            data, classes = self.get_all_runs(run)
+            data, classes = self.get_data(run)
 
         events = [[i, 1, cls] for i, cls in enumerate(classes)]
         event_id = {e: i for i, e in enumerate(self.metadata['classes'])}
