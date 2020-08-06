@@ -11,7 +11,7 @@ class GIGA(Database):
     metadata = databases.giga
 
     # ----------------------------------------------------------------------
-    def load_subject(self, subject: int) -> None:
+    def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
         data = super().load_subject(subject)
         self.data = data['eeg'][0][0]
@@ -63,9 +63,9 @@ class BCI2a(Database):
     metadata = databases.bci2a
 
     # ----------------------------------------------------------------------
-    def load_subject(self, subject: int) -> None:
+    def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
-        data = super().load_subject(subject)
+        data = super().load_subject(subject, mode)
         self.data = data['data'][0]
 
     # ----------------------------------------------------------------------
@@ -103,7 +103,7 @@ class HighGamma(Database):
     metadata = databases.highgamma
 
     # ----------------------------------------------------------------------
-    def load_subject(self, subject: int) -> None:
+    def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
         data = super().load_subject(subject)
         self.data = data.root

@@ -56,14 +56,18 @@ class Database(metaclass=ABCMeta):
 
     # ----------------------------------------------------------------------
     @abstractmethod
-    def load_subject(self, subject: int) -> None:
+    def load_subject(self, subject: int, mode: str) -> None:
         """"""
-        filename_subject = self.metadata['subject_pattern'](subject)
+        if not mode in ['training', 'evaluation']:
+            raise Exception(
+                f"No mode {mode} available, only 'training', 'evaluation'")
 
-        if filename_subject not in self.metadata['subject_files'].keys():
+        filename_subject = self.metadata[f'subject_{mode}_pattern'](subject)
+
+        if filename_subject not in self.metadata[f'subject_{mode}_files'].keys():
             raise Exception(f"Subject {subject} not in list of subjects.")
 
-        fid = self.metadata['subject_files'][filename_subject]
+        fid = self.metadata[f'subject_{mode}_files'][filename_subject]
 
         self.runs = self.metadata['runs'][subject]
         # self.data = load_mat(self.path, filename_subject, fid)['eeg'][0][0]

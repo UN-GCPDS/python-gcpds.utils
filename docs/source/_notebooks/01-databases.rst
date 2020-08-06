@@ -53,11 +53,15 @@ There is some base information for the database in the object
 Load Subject
 ------------
 
-The data by subject can be accessed with:
+The data by subject can be accessed with the method ``load_subject``,
+the ``training`` (default) or ``evaluation`` dataset can be selected
+with the argument ``mode``.
 
 .. code:: ipython3
 
-    db.load_subject(1)
+    db.load_subject(1, mode='training')  # training dataset
+    db.load_subject(1, mode='evaluation')  # evaluation dataset
+    
     print(f'The subject 1 has {db.runs} runs')
 
 
@@ -66,7 +70,8 @@ The data by subject can be accessed with:
     The subject 1 has 6 runs
 
 
-If the database does not exist or is corrupted, it will be downloaded.
+NOTE: If the database does not exist or is corrupted, it will be
+downloaded; Not all databases have an ``evaluation`` dataset.
 
 Load runs
 ---------

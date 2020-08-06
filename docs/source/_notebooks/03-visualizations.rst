@@ -6,7 +6,7 @@
     from ipywidgets import interact
     
     db = loaddb.BCI2a('BCI2a_database')
-    db.load_subject(1)
+    db.load_subject(1, mode='evaluation')
     data, classes = db.get_run(0)
     data = data[0]
     channels = db.metadata['channel_names']
