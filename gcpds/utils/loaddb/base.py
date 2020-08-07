@@ -72,7 +72,7 @@ class Database(metaclass=ABCMeta):
         self.subject = subject
         self.mode = mode
 
-        self.runs = self.metadata['runs'][subject - 1]
+        self.runs = self.metadata[f'runs_{mode}'][subject - 1]
         # self.data = load_mat(self.path, filename_subject, fid)['eeg'][0][0]
         return load_mat(self.path, filename_subject, fid)
 
