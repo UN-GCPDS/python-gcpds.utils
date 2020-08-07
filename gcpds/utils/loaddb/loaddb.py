@@ -75,6 +75,10 @@ class BCI2a(Database):
         channels = self.format_channels_selectors(channels)
         super().get_run(run, classes, channels)
 
+        # A04T contains only the eye movement condition
+        if self.subject == 4 and self.mode == 'training':
+            run = run - 2
+
         classes_list = [i[0] for i in self.data[3 + run][0][0][2]]
         starts = [s[0] for s in self.data[3 + run][0][0][1]]
         run = np.array([self.data[3 + run][0][0][0][start:start +
