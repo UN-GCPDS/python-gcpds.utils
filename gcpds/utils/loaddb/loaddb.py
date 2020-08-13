@@ -13,7 +13,7 @@ class GIGA(Database):
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
-        data = super().load_subject(subject)
+        data = super().load_subject(subject, mode)
         self.data = data['eeg'][0][0]
 
     # ----------------------------------------------------------------------
@@ -109,7 +109,7 @@ class HighGamma(Database):
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
-        data = super().load_subject(subject)
+        data = super().load_subject(subject, mode)
         self.data = data.root
 
     # ----------------------------------------------------------------------
