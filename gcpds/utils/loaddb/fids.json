@@ -1,0 +1,586 @@
+{
+  "GIGA training": {
+    "s01.mat": [
+      "1-EZGtgl_miuqQosDFgokb0aqcqO9ilkM",
+      203446256
+    ],
+    "s02.mat": [
+      "1-DMWiLVaR3AebZUN_vfAuQUTk5nzBTff",
+      205356726
+    ],
+    "s09.mat": [
+      "1-nvax2EBK9Jr2shOuWPUrdHwyGM-DY28",
+      234672043
+    ],
+    "s07.mat": [
+      "1-RKmgywLLpktXU9lp_FzjiB-oHF5Awc_",
+      233546637
+    ],
+    "s03.mat": [
+      "1-DZt1QDFmYiBeScTf3bXOhgvGIoR0WqS",
+      206547925
+    ],
+    "s05.mat": [
+      "1-JH5SjJqhz6OTa4In4jLMjzRdkhC_xRS",
+      204209809
+    ],
+    "s06.mat": [
+      "1-NFNrxMR6FFhRFb-WFGsVb-sPyD2cfom",
+      201737794
+    ],
+    "s04.mat": [
+      "1-I0aQLjVStmHkZNu4obPJYzWXnFSSKrl",
+      200456673
+    ],
+    "s08.mat": [
+      "1-S_BnDhNz_tptU4VXQLZfsNGXndlwM4q",
+      202618405
+    ],
+    "s10.mat": [
+      "1-w17fnIPXVEGFMd-f0vCxDVeejmTICNr",
+      202678732
+    ],
+    "s18.mat": [
+      "10hReDpOVcMXrmh1QxTc2dGz6kzK_m3Iz",
+      201912526
+    ],
+    "s12.mat": [
+      "104dWjYjjsNwSCTYi1zFE6lL_8Yx6Z6um",
+      208557544
+    ],
+    "s14.mat": [
+      "10GQhp1NPi1aVy-MBEWm3o6ACnbbqJYyn",
+      203565516
+    ],
+    "s11.mat": [
+      "100b36UuXz6QywxtA55lTrUZpAcwscN8Q",
+      203651167
+    ],
+    "s16.mat": [
+      "10SWyoQtWkO7-m3AE1Ah5uVJ_eHulmU3P",
+      204250575
+    ],
+    "s17.mat": [
+      "10fI2Rou3RpcGoy_6g2jDJ9NO87dhMRUp",
+      205150610
+    ],
+    "s13.mat": [
+      "105LwEr8VYL065zdHcA9Pvw9kQqcEbWnz",
+      199330843
+    ],
+    "s15.mat": [
+      "10NQ1d_rqLN8NDqLqO6COY82ly0MxT2Wz",
+      203290650
+    ],
+    "s19.mat": [
+      "10nVm7Landcg8WhPKN8z58qy2f49pUkS6",
+      207257547
+    ],
+    "s24.mat": [
+      "10zwX6ESB3lqB8hbPBNxnXn8kZVoMyXJk",
+      202913409
+    ],
+    "s23.mat": [
+      "10xpX2zhMQlywn_9U_ehBDm5OI_ep782q",
+      205256611
+    ],
+    "s20.mat": [
+      "10scCZ_i9HmRPyeXrB9FLgOupKMoFcnC3",
+      202043554
+    ],
+    "s25.mat": [
+      "11-7ihgYBWuq5MGyhqM1MzGvQilblPYLN",
+      205061623
+    ],
+    "s21.mat": [
+      "10uKs-ENKu6q6Mc4zjOYtB9ecrbRoYMGD",
+      202697521
+    ],
+    "s22.mat": [
+      "10uyu7wdODtfOxiBe3NHEwz-PxcGenIND",
+      203579859
+    ],
+    "s31.mat": [
+      "11WVUJl9C4b8UZ6WW5eGTAhJ65rMfCpS2",
+      207323724
+    ],
+    "s26.mat": [
+      "115qLK5O68CVF4LyF8N7XeEGEvC-pHWaP",
+      203011452
+    ],
+    "s29.mat": [
+      "11JJT8A32ZeINub04Ii8SFjCiuWS12rNh",
+      202928099
+    ],
+    "s28.mat": [
+      "11IJqoPuwOXc7QHN8I-1kQwVIo1wZ_5xB",
+      205554539
+    ],
+    "s27.mat": [
+      "118-sYBzWe_QTHwrfX1Pn0N6Ew-aqE7eY",
+      204789998
+    ],
+    "s30.mat": [
+      "11SFoueUYhrqT5sQlgVl9F2SNCMcbot5m",
+      204129671
+    ],
+    "s38.mat": [
+      "11rD-Rk-iqPGn91K7W6WmhTOKh5AKapUh",
+      204908512
+    ],
+    "s32.mat": [
+      "11XJHDRgO0KoES0vJdnwNvfh3OleU0E7u",
+      206235816
+    ],
+    "s33.mat": [
+      "11bA_uamY5F2QRyOcJlt8M-yaJFx5wFVM",
+      205696384
+    ],
+    "s35.mat": [
+      "11cxa9Nx1q_VvCR5tWEH6A3hN02UlY1-z",
+      201382139
+    ],
+    "s34.mat": [
+      "11cp02_PD2ISR88kCa_DlprnNkskO4Ep4",
+      203249088
+    ],
+    "s37.mat": [
+      "11jK9uNAXleF8jTLZ03O5jjZ6-9IzoBgo",
+      205542398
+    ],
+    "s36.mat": [
+      "11goCI86t4BLYyZ1uFPV8Gfv_lPayuWQ5",
+      202238390
+    ],
+    "s44.mat": [
+      "12GrKq5Xn3cw7PEr__u04G2oTQY47Se5l",
+      208780878
+    ],
+    "s43.mat": [
+      "126_tjA6k-E_XCPOGaQmm26f2a7eYtsZ5",
+      205312190
+    ],
+    "s41.mat": [
+      "11zSwFvndfOjqp6yH_TnAYwjveDb_jlmm",
+      203184362
+    ],
+    "s39.mat": [
+      "11u5eme2Vl7lYTxqTRTArVJZdujxTXe88",
+      206867819
+    ],
+    "s42.mat": [
+      "120pJMpv4DxH_kQ-HntogdMUa4IoEcfko",
+      201632098
+    ],
+    "s40.mat": [
+      "11uts-NC-mFYVbni4A1rw4BS2dHsZyuZV",
+      200137624
+    ],
+    "s45.mat": [
+      "12KtJSItPRVUPhDhpBztXfjTzeZ35DRsR",
+      208130079
+    ],
+    "s47.mat": [
+      "12MzUSL8dg-joeseAxesn_ORd18SVznxT",
+      201698159
+    ],
+    "s50.mat": [
+      "12ja8k5jrjLqz7hWR-VTdj_he1Kvrksf3",
+      205228049
+    ],
+    "s49.mat": [
+      "12arnyom4_3y9zmC7mV-3PD7Qd_3lGVi5",
+      203273886
+    ],
+    "s51.mat": [
+      "12mJrVuRyGVb_Z6o99asLbOmW2W3mGZUp",
+      199549446
+    ],
+    "s48.mat": [
+      "12OxDKXx27Q8gs4hv2_uFPajSOcJP1ZYs",
+      205771783
+    ],
+    "s46.mat": [
+      "12L8kcb1vWLBrl0c3d2JV8Lq75em0WKHw",
+      237147858
+    ],
+    "s52.mat": [
+      "12nVvPcGnLk4PGRxhoW4hnbD3pB_O9hUj",
+      206541841
+    ]
+  },
+  "BCI2a training": {
+    "A07T.mat": [
+      "13Wi9WyooD8OVpvN4NuEJDwEUEBarE6j1",
+      42809746
+    ],
+    "A05T.mat": [
+      "13VAuMDGBJvteq-wd5d7aCn9P0gQppTTw",
+      42452392
+    ],
+    "A03T.mat": [
+      "13U3OAbT9mHYogDFPUGRJidZtdZNbQKrF",
+      44057065
+    ],
+    "A04T.mat": [
+      "13M9-YcFfLsNbxZbcoC6vvHIgarHqcnMI",
+      37150377
+    ],
+    "A02T.mat": [
+      "13HwRr33M4-AF29fax5dEe4-gbsjxcsHB",
+      43068077
+    ],
+    "A01T.mat": [
+      "12zyaUpCdnCdAV1rZCtps9zVFdiFQcM9T",
+      42806453
+    ],
+    "A09T.mat": [
+      "13nLMfIma-U6cMMzr0G_FMzXa_70m6Lgd",
+      44785478
+    ],
+    "A08T.mat": [
+      "13fBcezRcNkT0HclYQZAO4cYrgJswDd8t",
+      45032065
+    ],
+    "A06T.mat": [
+      "13kDYn4xC_qN1A_uhjguHRf58A9r1mRAb",
+      44581256
+    ]
+  },
+  "BCI2a evaluation": {
+    "A07E.mat": [
+      "13_iqEX87BZKBQa4brpA-DjHEW2fnxPp1",
+      42242294
+    ],
+    "A03E.mat": [
+      "13PA1waTczdnEC3etiIXMFsS8Wi2ofqBX",
+      42316292
+    ],
+    "A01E.mat": [
+      "13DGTlmhomXx5NSC8xRZJVcaciZQdK_gk",
+      43772146
+    ],
+    "A04E.mat": [
+      "13SLX3vei-NPedFVYMjgaVjjU4vk-u640",
+      41730824
+    ],
+    "A09E.mat": [
+      "13GKLK2Zeo2fRHFuvpVfcd87WYYaQl5dY",
+      44780912
+    ],
+    "A02E.mat": [
+      "13Q1LLbCl7folvH6tim3atsPCl_HHBCI4",
+      44218409
+    ],
+    "A05E.mat": [
+      "13VIvxTq9MrpNXBh-j9XPpVvssrEMDwWE",
+      44392496
+    ],
+    "A08E.mat": [
+      "13psNQzm6QF0l4q2fgNEs6mXlBTJT2xiI",
+      46282127
+    ],
+    "A06E.mat": [
+      "13ers-B4ZDXQwUZDJagfdPoJ9AuqiAEpO",
+      43395510
+    ]
+  },
+  "GIGA(laplacian) training": {
+    "Lp_sub_4clas.mat": [
+      "1-9GUsefELpg3SGPQQK9KA0mjCJ0r-vpy",
+      344934655
+    ],
+    "Lp_sub_3clas.mat": [
+      "1-6Q2hjL1aBVYsjUSeKBZLnhKp0Jls2ma",
+      345490635
+    ],
+    "Lp_sub_2clas.mat": [
+      "1-2SDX2Y12-XBfFuhtyJPI-CkWXaH_zgS",
+      342146713
+    ],
+    "Lp_sub_5clas.mat": [
+      "1-ARx9OnfcnKSLpeMkyb55dEBZtD82Fw7",
+      343972785
+    ],
+    "Lp_sub_12clas.mat": [
+      "1-_Z-Pi9y45piI0ho3lg1bEqmm-n-u3ma",
+      300166192
+    ],
+    "Lp_sub_17clas.mat": [
+      "100M_r0jroy27gdNc_fi5ztstVDyuaDlJ",
+      345194005
+    ],
+    "Lp_sub_21clas.mat": [
+      "10Y6qqaFrPsjlxjhY08V2yi9ucIjnB8dG",
+      342883538
+    ],
+    "Lp_sub_11clas.mat": [
+      "1-V_Oez9v2P0d3sX3irnnq6B0a8lveRLw",
+      345408868
+    ],
+    "Lp_sub_14clas.mat": [
+      "1-jmLH9wosCwJ-9bjP-yOBJ1RslOzaelN",
+      345235550
+    ],
+    "Lp_sub_20clas.mat": [
+      "10VB_Fx3y3hOJVcNAoipuFUDuT0dk2Kcy",
+      143855335
+    ],
+    "Lp_sub_23clas.mat": [
+      "10qG05oGZxXs-DNJ2K0gcAwvkVL7SUVIk",
+      339877539
+    ],
+    "Lp_sub_18clas.mat": [
+      "10PDBCCcrkuNpG9H7skYdDwoSkcY5SNka",
+      345342968
+    ],
+    "Lp_sub_16clas.mat": [
+      "1-zTtW29rFgcrmENNRQEUQA8pBAee1DzG",
+      344345582
+    ],
+    "Lp_sub_10clas.mat": [
+      "1-RDfBGCCi8VJxz9JvFSV6ybqvAzgIJ20",
+      345796167
+    ],
+    "Lp_sub_7clas.mat": [
+      "1-GLOxVxUZESORwJZhryBdygR9GM3748R",
+      412915473
+    ],
+    "Lp_sub_6clas.mat": [
+      "1-BgsOJqNG1twKdPQyVpOIiMHeVvB9U9H",
+      306471994
+    ],
+    "Lp_sub_9clas.mat": [
+      "1-OGTDx7BXv0LPdbSYxQnnR6bX-Q7o8dP",
+      414605435
+    ],
+    "Lp_sub_13clas.mat": [
+      "1-dY5sWEv1u1A05ieSJ1tSehE9KkOCbp3",
+      343562331
+    ],
+    "Lp_sub_15clas.mat": [
+      "1-xCZok-Ic8cNpBWgFsx6VvqxtfY1m_Bz",
+      330892603
+    ],
+    "Lp_sub_8clas.mat": [
+      "1-HLW9ad99ZAzfyTlCxjva1X0OPAzyVML",
+      342362096
+    ],
+    "Lp_sub_22clas.mat": [
+      "10jM6V8VzqF8LyWTUPfWpSQxilkm6dVUX",
+      344758138
+    ],
+    "Lp_sub_19clas.mat": [
+      "10RlXn0DH9mS-64hQLOx0Xb6iEE_r7OZD",
+      247820138
+    ],
+    "Lp_sub_24clas.mat": [
+      "10xh5kGME21s98mlFt7Vcz7GKsn89IjTq",
+      344945772
+    ],
+    "Lp_sub_40clas.mat": [
+      "128vGg_ds2HfBAKlQ5tqJfoRoeohBJgkB",
+      345712254
+    ],
+    "Lp_sub_41clas.mat": [
+      "12FB0kISG8iV35Ijo-w24mtv5Tpg-3xo2",
+      343892661
+    ],
+    "Lp_sub_35clas.mat": [
+      "11pHcDXE1McKghx0wG7d0IusF5BsQScgL",
+      346326025
+    ],
+    "Lp_sub_36clas.mat": [
+      "11yiOwOnKMEco0pPPY_BUk9mSgZuiPzSA",
+      336874831
+    ],
+    "Lp_sub_25clas.mat": [
+      "111jnlEJ4_pgJIIbeMtp4qsPQVre7uIOU",
+      338657803
+    ],
+    "Lp_sub_26clas.mat": [
+      "113bn3pGJSkj6GVLJAQ9IdZqLTnsLMG84",
+      344638739
+    ],
+    "Lp_sub_28clas.mat": [
+      "11DyEv7QcQOtO6Dn_KeG6ZsJ4m_mTav8L",
+      339611317
+    ],
+    "Lp_sub_33clas.mat": [
+      "11o3PXgcDRjKAxwMBEXTCZ9hgsfNbFU9-",
+      345813000
+    ],
+    "Lp_sub_37clas.mat": [
+      "12-oCPI5vWH4ufQ67VnllyyQIss-KInjj",
+      346054087
+    ],
+    "Lp_sub_42clas.mat": [
+      "12H-dk32M2H2uEZv8Gw_i_oPDL2YlWH_B",
+      345376635
+    ],
+    "Lp_sub_32clas.mat": [
+      "11kKEG7BJcsqY8Cibs3VvdvXOt8CcCVpV",
+      345768528
+    ],
+    "Lp_sub_31clas.mat": [
+      "11cfFErRbVWnSn5UAcobJvC2imHYuF1sZ",
+      343819991
+    ],
+    "Lp_sub_30clas.mat": [
+      "11XH8naOTrzvh1J6S0YqRSwqJKdo3aeo5",
+      211094694
+    ],
+    "Lp_sub_27clas.mat": [
+      "11AHWG_fogZD3jGihkjeboFZxhuA7ddlO",
+      320124720
+    ],
+    "Lp_sub_39clas.mat": [
+      "126zqJMwlWlCCD2YdWEw1SSCTk5XDZuhJ",
+      343201082
+    ],
+    "Lp_sub_38clas.mat": [
+      "123yRHEtgRSmUaT-0EwbEVkJEoySxq0RH",
+      329345978
+    ],
+    "Lp_sub_45clas.mat": [
+      "12NZ6Lu9Cbf5TGfilfvMCqIoQRmIH9Wxq",
+      343552145
+    ],
+    "Lp_sub_44clas.mat": [
+      "12HFOawoY4X4RRpcJmbjaLi8iqLBGEdm7",
+      346124500
+    ],
+    "Lp_sub_43clas.mat": [
+      "12H2voSmflmXAsixxMOwdkxNDH6VqSjMN",
+      346113165
+    ],
+    "Lp_sub_48clas.mat": [
+      "12V-UBSDLW8_XnhQ2Hdc16BpGpRt4xMrn",
+      341887022
+    ],
+    "Lp_sub_46clas.mat": [
+      "12RwRCzvEoVhAwlsAmDIVeNTQVBOdsfxu",
+      412979442
+    ],
+    "Lp_sub_52clas.mat": [
+      "12u2SUP3x-YY5c0kcbJCouMVDIf-84WPB",
+      345518960
+    ],
+    "Lp_sub_49clas.mat": [
+      "12en_Lp5mt2gv5T-d2C1W_s2Rq6GiDUGw",
+      331679434
+    ],
+    "Lp_sub_1clas.mat": [
+      "132PjTN1Ff-yns923VCVY2xMkcGfhdufc",
+      345674154
+    ],
+    "Lp_sub_47clas.mat": [
+      "12TvjHmCKvJYRDA-3HKel56aaoRRRrEhM",
+      331825734
+    ],
+    "Lp_sub_50clas.mat": [
+      "12jUSwiR2lH3Sb1E283kQXB_OYl7riipe",
+      345466807
+    ]
+  },
+  "HighGamma training": {
+    "5.mat": [
+      "1-7kErcdRCljsBEV8LLiVyFp1pN-rwjN2",
+      1311758731
+    ],
+    "3.mat": [
+      "1-1SVeoTw8T0TvyjbqfiS66Ouz5u9caHm",
+      1602541131
+    ],
+    "4.mat": [
+      "1-5k6DEE9U3nySZBwtAIyQUCoqp5oW0oN",
+      1657061958
+    ],
+    "2.mat": [
+      "1-0vJzKqF0lqycOOzCvRqcvu8BqlqtS7T",
+      1484356275
+    ],
+    "1.mat": [
+      "1-0EV91MdywTNi1Cqjrot7rtHbgjjkGEf",
+      585826008
+    ],
+    "6.mat": [
+      "1-Dl_pO0-Ainlow__OcWqjsHnhtlADw3A",
+      1625560987
+    ],
+    "7.mat": [
+      "1-FFTugvJDPfIUCZAKPzdZPu9upAqL_cD",
+      1589921225
+    ],
+    "10.mat": [
+      "1-U0MEhWXoEqGRsxwibyJLFmpyDyjLjMF",
+      1600817673
+    ],
+    "8.mat": [
+      "1-SQLHsUBPxtzwNRoAXCd-RqYBM0Alrgu",
+      1218602368
+    ],
+    "9.mat": [
+      "1-ScVIfRLnh4RUW0yTbmwjzwqQoOI2JUl",
+      1608492641
+    ]
+  },
+  "HighGamma evaluation": {
+    "2.mat": [
+      "1-DI0kMDcnPBL0GDfwh5EHxCGLIWcwOZf",
+      291765523
+    ],
+    "4.mat": [
+      "1-FM6xQeqwrjOAHBhEvUy8-eZG9Sn8kfB",
+      297202744
+    ],
+    "3.mat": [
+      "1-EMBfPdWDWP73i3XCdnBcxZ98fIOo19F",
+      292734137
+    ],
+    "1.mat": [
+      "1--WDlIVRhA2O9mQ9LgzdDWm3a6g0xftT",
+      297068703
+    ],
+    "13.mat": [
+      "103QRbmIvcQjVpwX925XPoIRgIo-hFZjs",
+      286030242
+    ],
+    "7.mat": [
+      "1-c2sul9WJmNwfpwaiNo4OXz4vnEWK3pZ",
+      288866313
+    ],
+    "5.mat": [
+      "1-GMCU4w55FPE4eqZ-hlv9Q_t4ntQjO09",
+      293006006
+    ],
+    "12.mat": [
+      "102HgkhMiLbU_ccD5Dwb9n6UsDyvqluHT",
+      300044294
+    ],
+    "14.mat": [
+      "10ASFrk7ZcmQs81nhwf7ix8bL0Q62DcJG",
+      284997837
+    ],
+    "10.mat": [
+      "1-xH2uMXsC8DETpr2L5f2Igm8KjIsJpn3",
+      291089556
+    ],
+    "9.mat": [
+      "1-o-SjvF_FJxjanlbgCzuuhfX6dwPjsbH",
+      293083686
+    ],
+    "11.mat": [
+      "1-zzeL6teZvIlq9w9jhH2qQdQUX4ltfp0",
+      288436906
+    ],
+    "8.mat": [
+      "1-n3eLx4se1ArMxaA7nQR6YSwiwOneVXr",
+      299409198
+    ],
+    "6.mat": [
+      "1-GjB0CDqoi7Ab_68Veb8-8e2VLDK0viB",
+      296943379
+    ]
+  }
+}

@@ -5,7 +5,7 @@ from sys import stdout
 from os import makedirs
 from os.path import dirname
 from os.path import exists
-import logging
+from tqdm.auto import tqdm
 
 
 class GoogleDriveDownloader:
@@ -17,7 +17,7 @@ class GoogleDriveDownloader:
     DOWNLOAD_URL = 'https://drive.google.com/uc?export=download'
 
     @staticmethod
-    def download_file_from_google_drive(file_id, dest_path, overwrite=False, unzip=False, showsize=False):
+    def download_file_from_google_drive(file_id, dest_path, overwrite=False, unzip=False, showsize=False, size=None):
         """
         Downloads a shared file from google drive into a given folder.
         Optionally unzips it.
@@ -36,7 +36,7 @@ class GoogleDriveDownloader:
             optional, if True unzips a file.
             If the file is not a zip file, ignores it.
         showsize: bool
-            optional, if True logging.info the current download size.
+            optional, if True print the current download size.
         Returns
         -------
         None
@@ -50,7 +50,7 @@ class GoogleDriveDownloader:
 
             session = requests.Session()
 
-            logging.info('Downloading {} into {}... '.format(
+            print('Downloading {} into {}... '.format(
                 file_id, dest_path))
             stdout.flush()
 
@@ -64,20 +64,20 @@ class GoogleDriveDownloader:
                     GoogleDriveDownloader.DOWNLOAD_URL, params=params, stream=True)
 
             if showsize:
-                logging.info()  # Skip to the next line
+                print()  # Skip to the next line
 
             current_download_size = [0]
             GoogleDriveDownloader._save_response_content(
-                response, dest_path, showsize, current_download_size)
-            logging.info('Done.')
+                response, dest_path, showsize, current_download_size, size, dest_path)
+            print('Done.')
 
             if unzip:
                 try:
-                    logging.info('Unzipping...')
+                    print('Unzipping...')
                     stdout.flush()
                     with zipfile.ZipFile(dest_path, 'r') as z:
                         z.extractall(destination_directory)
-                    logging.info('Done.')
+                    print('Done.')
                 except zipfile.BadZipfile:
                     warnings.warn(
                         'Ignoring `unzip` since "{}" does not look like a valid zip file'.format(file_id))
@@ -90,13 +90,13 @@ class GoogleDriveDownloader:
         return None
 
     @staticmethod
-    def _save_response_content(response, destination, showsize, current_size):
+    def _save_response_content(response, destination, showsize, current_size, size, dest_path):
         with open(destination, 'wb') as f:
-            for chunk in response.iter_content(GoogleDriveDownloader.CHUNK_SIZE):
+            for chunk in tqdm(response.iter_content(GoogleDriveDownloader.CHUNK_SIZE), desc=dest_path, unit='B', unit_divisor=1024, unit_scale=True, total=size / GoogleDriveDownloader.CHUNK_SIZE):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
                     if showsize:
-                        logging.info(
+                        print(
                             '\r' + GoogleDriveDownloader.sizeof_fmt(current_size[0]), end=' ')
                         stdout.flush()
                         current_size[0] += GoogleDriveDownloader.CHUNK_SIZE

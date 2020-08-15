@@ -15,7 +15,7 @@ ALL = 'all'
 
 
 # ----------------------------------------------------------------------
-def load_mat(path: str, mat: str, fid: str, overwrite: Optional[bool] = False) -> np.ndarray:
+def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrite: Optional[bool] = False) -> np.ndarray:
     """Get the raw data for one individual file.
 
     If the file does not exist in the specified path then tries to download it
@@ -31,7 +31,7 @@ def load_mat(path: str, mat: str, fid: str, overwrite: Optional[bool] = False) -
             return tables.open_file(filepath, driver="H5FD_CORE")
         except:
             logging.warning('Corrupt database!!\n, overwriting...')
-            return load_mat(path, mat, fid, overwrite=True)
+            return load_mat(path, mat, fid, size, overwrite=True)
 
     else:
         logging.warning('Database not found!')
@@ -41,8 +41,9 @@ def load_mat(path: str, mat: str, fid: str, overwrite: Optional[bool] = False) -
         gdd.download_file_from_google_drive(file_id=fid,
                                             dest_path=filepath,
                                             unzip=False,
-                                            overwrite=overwrite)
-        return load_mat(path, mat, fid)
+                                            overwrite=overwrite,
+                                            size=size)
+        return load_mat(path, mat, fid, size)
 
 
 ########################################################################
@@ -67,14 +68,14 @@ class Database(metaclass=ABCMeta):
         if filename_subject not in self.metadata[f'subject_{mode}_files'].keys():
             raise Exception(f"Subject {subject} not in list of subjects.")
 
-        fid = self.metadata[f'subject_{mode}_files'][filename_subject]
+        fid, size = self.metadata[f'subject_{mode}_files'][filename_subject]
 
         self.subject = subject
         self.mode = mode
 
         self.runs = self.metadata[f'runs_{mode}'][subject - 1]
         # self.data = load_mat(self.path, filename_subject, fid)['eeg'][0][0]
-        return load_mat(self.path, filename_subject, fid)
+        return load_mat(self.path, filename_subject, fid, size)
 
     # ----------------------------------------------------------------------
     @abstractmethod
