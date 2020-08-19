@@ -65,10 +65,11 @@ class Database(metaclass=ABCMeta):
 
         filename_subject = self.metadata[f'subject_{mode}_pattern'](subject)
 
-        if filename_subject not in self.metadata[f'subject_{mode}_files'].keys():
+        if os.path.split(filename_subject)[-1] not in self.metadata[f'subject_{mode}_files'].keys():
             raise Exception(f"Subject {subject} not in list of subjects.")
 
-        fid, size = self.metadata[f'subject_{mode}_files'][filename_subject]
+        fid, size = self.metadata[f'subject_{mode}_files'][os.path.split(
+            filename_subject)[-1]]
 
         self.subject = subject
         self.mode = mode
