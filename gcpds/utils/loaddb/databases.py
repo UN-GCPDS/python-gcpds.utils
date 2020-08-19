@@ -56,10 +56,10 @@ highgamma = {
     'artifacts': [],
 
     'subject_training_files': fids['HighGamma training'],
-    'subject_training_pattern': lambda subject: os.path.join('train', f'{subject}T.mat'),
+    'subject_training_pattern': lambda subject: os.path.join('train', f'{subject}.mat'),
 
     'subject_evaluation_files': fids['HighGamma evaluation'],
-    'subject_evaluation_pattern': lambda subject: os.path.join('test', f'{subject}E.mat'),
+    'subject_evaluation_pattern': lambda subject: os.path.join('test', f'{subject}.mat'),
 
 }
 
