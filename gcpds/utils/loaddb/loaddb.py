@@ -28,7 +28,7 @@ class GIGA(Database):
 
         # Split in runs and select the specified run
         trials_count = self.data[9][0][0]
-        cues = [all_cues[i:i + 20] for i in range(0, trials_count, 20)][run]
+        cues = np.array([all_cues[i:i + 20] for i in range(0, trials_count, 20)][run])
 
         start = (self.metadata['sampling_rate'] * 2) - 1
         end = (self.metadata['sampling_rate'] * 5) + 1
@@ -41,7 +41,7 @@ class GIGA(Database):
                 if len(tmp)!=0:
                     trials_runs[tmp-1]=0
                     bad_trials.extend([trials_runs[i:i + 20] for i in range(0, trials_count, 20)])
-            cues = cues[bad_trials[(cls*5)+run-1]]  #cls*max_runs -- run-1
+            cues = cues[bad_trials[(cls*self.runs)+run]]  #cls*max_runs -- run-1
         #
         trials = []
         classes_out = []
