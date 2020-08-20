@@ -17,7 +17,7 @@ class GIGA(Database):
         self.data = data['eeg'][0][0]
 
     # ----------------------------------------------------------------------
-    def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
+    def get_run(self, run: int, Reject_bad_trials: bool, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
         """"""
         classes = self.format_class_selector(classes)
         channels = self.format_channels_selectors(channels)
@@ -32,7 +32,17 @@ class GIGA(Database):
 
         start = (self.metadata['sampling_rate'] * 2) - 1
         end = (self.metadata['sampling_rate'] * 5) + 1
-
+        # reject bad trial
+        if Reject_bad_trials:
+            bad_trials=[]
+            for cls in classes:
+                trials_runs = np.ones((trials_count,),dtype=bool)
+                tmp=data[14][0][0][1][0][cls]#14 bad trials--bad trials MI
+                if len(tmp)!=0:
+                    trials_runs[tmp-1]=0
+                    bad_trials.extend([trials_runs[i:i + 20] for i in range(0, trials_count, 20)])
+            cues = cues[bad_trials[(cls*5)+run]]  #cls*max_runs
+        #
         trials = []
         classes_out = []
         for cls in classes:
