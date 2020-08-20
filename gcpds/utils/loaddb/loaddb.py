@@ -37,7 +37,7 @@ class GIGA(Database):
             bad_trials=[]
             for cls in classes:
                 trials_runs = np.ones((trials_count,),dtype=bool)
-                tmp=data[14][0][0][1][0][cls]#14 bad trials--bad trials MI
+                tmp=self.data[14][0][0][1][0][cls]#14 bad trials--bad trials MI
                 if len(tmp)!=0:
                     trials_runs[tmp-1]=0
                     bad_trials.extend([trials_runs[i:i + 20] for i in range(0, trials_count, 20)])
