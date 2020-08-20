@@ -49,9 +49,10 @@ class GIGA(Database):
             if Reject_bad_trials:
                 cues_r = cues[bad_trials[(cls*self.runs)+run]]  #cls*max_runs -- run-1
                 trials.extend([data[:, cue - start:cue + end] for cue in cues_r])
+                classes_out.extend([cls] * len(cues_r))
             else:
                 trials.extend([data[:, cue - start:cue + end] for cue in cues])
-            classes_out.extend([cls] * len(cues))
+                classes_out.extend([cls] * len(cues))
 
         # Select only EEG channels
         run = np.array(trials)[:, :len(self.metadata['channel_names']), :]
