@@ -41,7 +41,7 @@ class GIGA(Database):
                 if len(tmp)!=0:
                     trials_runs[tmp-1]=0
                     bad_trials.extend([trials_runs[i:i + 20] for i in range(0, trials_count, 20)])
-            cues = cues[bad_trials[(cls*5)+run]]  #cls*max_runs
+            cues = cues[bad_trials[(cls*5)+run-1]]  #cls*max_runs -- run-1
         #
         trials = []
         classes_out = []
