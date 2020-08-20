@@ -40,14 +40,17 @@ class GIGA(Database):
                 tmp=self.data[14][0][0][1][0][cls]#14 bad trials--bad trials MI
                 if len(tmp)!=0:
                     trials_runs[tmp-1]=0
-                    bad_trials.extend([trials_runs[i:i + 20] for i in range(0, trials_count, 20)])
-            cues = cues[bad_trials[(cls*self.runs)+run]]  #cls*max_runs -- run-1
+                bad_trials.extend([trials_runs[i:i + 20] for i in range(0, trials_count, 20)])
         #
         trials = []
         classes_out = []
         for cls in classes:
             data = self.data[7 + cls]  # classes starts in index 7
-            trials.extend([data[:, cue - start:cue + end] for cue in cues])
+            if Reject_bad_trials:
+                cues_r = cues[bad_trials[(cls*self.runs)+run]]  #cls*max_runs -- run-1
+                trials.extend([data[:, cue - start:cue + end] for cue in cues_r])
+            else:
+                trials.extend([data[:, cue - start:cue + end] for cue in cues])
             classes_out.extend([cls] * len(cues))
 
         # Select only EEG channels
