@@ -51,8 +51,8 @@ highgamma = {
     'montage': 'standard_1005',
     'tmin': -0.5,
     'reference': '',
-    'runs_training': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    'runs_evaluation': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    'runs_training': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    'runs_evaluation': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     'artifacts': [],
 
     'subject_training_files': fids['HighGamma training'],
