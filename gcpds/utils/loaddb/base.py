@@ -101,13 +101,22 @@ class Database(metaclass=ABCMeta):
     # ----------------------------------------------------------------------
     def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True):
         """Return all runs."""
-        r, c = self.get_run(0, classes=classes, channels=channels,
-                            reject_bad_trials=reject_bad_trials)
-        for run in range(1, self.runs):
+
+        start = 0
+        for _ in range(self.runs):
+            r, c = self.get_run(start, classes=classes, channels=channels,
+                                reject_bad_trials=reject_bad_trials)
+            if not r is None:
+                break
+            else:
+                start += 1
+
+        for run in range(start + 1, self.runs):
             r_, c_ = self.get_run(
                 run, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials)
-            r = np.concatenate([r, r_], axis=0)
-            c = np.concatenate([c, c_])
+            if not r_ is None:
+                r = np.concatenate([r, r_], axis=0)
+                c = np.concatenate([c, c_])
 
         return r, c
 
