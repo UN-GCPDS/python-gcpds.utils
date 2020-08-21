@@ -3,6 +3,7 @@ from .base import Database, ALL
 from typing import Optional, Tuple
 import numpy as np
 from . import databases
+import warnings
 
 
 ########################################################################
@@ -100,8 +101,8 @@ class BCI2a(Database):
 
         classes_list = [i[0] for i in self.data[3 + run][0][0][2]]
         starts = [s[0] for s in self.data[3 + run][0][0][1]]
-        run = np.array([self.data[3 + run][0][0][0][start:start +
-                                                    (self.metadata['sampling_rate'] * 7)] for start in starts])
+        run = np.array([self.data[3 + run][0][0][0][start:start
+                                                    + (self.metadata['sampling_rate'] * 7)] for start in starts])
 
         # Remove EOG
         run = run[:, :, :22]
@@ -129,7 +130,12 @@ class HighGamma(Database):
     def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
         data = super().load_subject(subject, mode)
-        self.data = data.root
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            self.data = data.root
+            # DataTypeWarning: Unsupported type for attribute 'MATLAB_fields' in node 'mrk'
+            self.data_mrk = data.root.mrk
 
     # ----------------------------------------------------------------------
     def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> Tuple[np.ndarray, np.ndarray]:
@@ -138,8 +144,8 @@ class HighGamma(Database):
         channels = self.format_channels_selectors(channels)
         super().get_run(run, classes, channels, reject_bad_trials)
 
-        classes_list = self.data.mrk.event.desc.read()[0]
-        cues = ((self.data.mrk.time.read() / 1000) * 500).T[0].astype(int)
+        classes_list = self.data_mrk.event.desc.read()[0]
+        cues = ((self.data_mrk.time.read() / 1000) * 500).T[0].astype(int)
 
         start = np.int(
             (self.metadata['sampling_rate'] * self.metadata['tmin']) - 1)

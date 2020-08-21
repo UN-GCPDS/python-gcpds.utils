@@ -10,6 +10,7 @@ import json
 import mne
 import tables
 import logging
+import warnings
 
 ALL = 'all'
 
