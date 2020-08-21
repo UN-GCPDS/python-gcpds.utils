@@ -4,9 +4,11 @@ from typing import Optional, Tuple
 import numpy as np
 from . import databases
 import warnings
-
+import logging
 
 ########################################################################
+
+
 class GIGA(Database):
     """"""
     metadata = databases.giga
@@ -52,13 +54,20 @@ class GIGA(Database):
             data = self.data[7 + cls]  # classes starts in index 7
             if reject_bad_trials:
                 # cls*max_runs -- run-1
-                cues_r = cues[bad_trials[(cls * self.runs) + run]]
-                trials.extend([data[:, cue - start:cue + end]
-                               for cue in cues_r])
-                classes_out.extend([cls] * len(cues_r))
+                x = bad_trials[(cls * self.runs) + run]
+                cues_r = cues[x]
+                if len(cues_r):
+                    trials.extend([data[:, cue - start:cue + end]
+                                   for cue in cues_r])
+                    classes_out.extend([cls] * len(cues_r))
             else:
                 trials.extend([data[:, cue - start:cue + end] for cue in cues])
                 classes_out.extend([cls] * len(cues))
+
+        if not len(trials):
+            logging.warning(
+                f'The subject {self.subject} in the run {run} has no data.')
+            return None, None
 
         # Select only EEG channels
         run = np.array(trials)[:, :len(self.metadata['channel_names']), :]
@@ -101,8 +110,8 @@ class BCI2a(Database):
 
         classes_list = [i[0] for i in self.data[3 + run][0][0][2]]
         starts = [s[0] for s in self.data[3 + run][0][0][1]]
-        run = np.array([self.data[3 + run][0][0][0][start:start
-                                                    + (self.metadata['sampling_rate'] * 7)] for start in starts])
+        run = np.array([self.data[3 + run][0][0][0][start:start +
+                                                    (self.metadata['sampling_rate'] * 7)] for start in starts])
 
         # Remove EOG
         run = run[:, :, :22]
