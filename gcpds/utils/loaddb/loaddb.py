@@ -17,7 +17,7 @@ class GIGA(Database):
         self.data = data['eeg'][0][0]
 
     # ----------------------------------------------------------------------
-    def get_run(self, run: int, reject_bad_trials: Optional(bool) = True, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
+    def get_run(self, run: int, reject_bad_trials: Optional[bool] = True, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
         """"""
         classes = self.format_class_selector(classes)
         channels = self.format_channels_selectors(channels)
