@@ -17,11 +17,11 @@ class GIGA(Database):
         self.data = data['eeg'][0][0]
 
     # ----------------------------------------------------------------------
-    def get_run(self, run: int, reject_bad_trials: Optional[bool] = True, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
+    def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> Tuple[np.ndarray, np.ndarray]:
         """"""
         classes = self.format_class_selector(classes)
         channels = self.format_channels_selectors(channels)
-        super().get_run(run, classes, channels)
+        super().get_run(run, classes, channels, reject_bad_trials)
 
         # Index of starts of all cues
         all_cues = np.where(self.data[11][0] == 1)[0]
@@ -88,11 +88,11 @@ class BCI2a(Database):
         self.data = data['data'][0]
 
     # ----------------------------------------------------------------------
-    def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
+    def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> Tuple[np.ndarray, np.ndarray]:
         """"""
         classes = self.format_class_selector(classes)
         channels = self.format_channels_selectors(channels)
-        super().get_run(run, classes, channels)
+        super().get_run(run, classes, channels, reject_bad_trials)
 
         # A04T contains only the eye movement condition
         if self.subject == 4 and self.mode == 'training':
@@ -132,11 +132,11 @@ class HighGamma(Database):
         self.data = data.root
 
     # ----------------------------------------------------------------------
-    def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
+    def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> Tuple[np.ndarray, np.ndarray]:
         """"""
         classes = self.format_class_selector(classes)
         channels = self.format_channels_selectors(channels)
-        super().get_run(run, classes, channels)
+        super().get_run(run, classes, channels, reject_bad_trials)
 
         classes_list = self.data.mrk.event.desc.read()[0]
         cues = ((self.data.mrk.time.read() / 1000) * 500).T[0].astype(int)

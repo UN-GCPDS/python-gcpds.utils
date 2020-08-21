@@ -28,7 +28,12 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
         try:
             return loadmat(filepath)
         except ValueError:
-            return tables.open_file(filepath, driver="H5FD_CORE")
+            try:
+                return tables.open_file(filepath, driver="H5FD_CORE")
+            except tables.exceptions.HDF5ExtError:
+                logging.warning('Corrupt database!!\n, overwriting...')
+                return load_mat(path, mat, fid, size, overwrite=True)
+
         except:
             logging.warning('Corrupt database!!\n, overwriting...')
             return load_mat(path, mat, fid, size, overwrite=True)
@@ -80,7 +85,7 @@ class Database(metaclass=ABCMeta):
 
     # ----------------------------------------------------------------------
     @abstractmethod
-    def get_run(self, run: int, classes: Union[int, str], channels=Union[int, str]) -> np.ndarray:
+    def get_run(self, run: int, classes: Union[int, str], channels=Union[int, str], reject_bad_trials: Optional[bool] = True) -> np.ndarray:
         """"""
         if run > self.runs:
             raise Exception(f'The current user only have {self.runs} runs.')
@@ -93,11 +98,13 @@ class Database(metaclass=ABCMeta):
                 f"The class index {np.max(classes)} is out of range.")
 
     # ----------------------------------------------------------------------
-    def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL):
+    def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True):
         """Return all runs."""
-        r, c = self.get_run(0, classes=classes, channels=channels)
+        r, c = self.get_run(0, classes=classes, channels=channels,
+                            reject_bad_trials=reject_bad_trials)
         for run in range(1, self.runs):
-            r_, c_ = self.get_run(run, classes=classes, channels=channels)
+            r_, c_ = self.get_run(
+                run, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials)
             r = np.concatenate([r, r_], axis=0)
             c = np.concatenate([c, c_])
 
@@ -136,7 +143,7 @@ class Database(metaclass=ABCMeta):
         """"""
 
     # ----------------------------------------------------------------------
-    def get_epochs(self, run=ALL, ** kwargs):
+    def get_epochs(self, run=ALL, **kwargs):
         """"""
         # Remove channels that not correspond with the montage
         montage = mne.channels.make_standard_montage(self.metadata['montage'])
