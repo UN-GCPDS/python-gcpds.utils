@@ -133,6 +133,8 @@ Is possible to select the runs by ``channel`` and/or ``class``
 
 The classes and the channels can be indexes instead of labels:
 
+The channels indexes, by convention, are 1-based array.
+
 .. code:: ipython3
 
     run, class_ = db.get_data(classes=[1, 3], channels=[1, 5, 10])
@@ -147,7 +149,50 @@ The classes and the channels can be indexes instead of labels:
 
 
 
-The channels indexes, by convention, are 1-based array.
+Reject bad trials
+-----------------
+
+The argument ``reject_bad_trials`` is ``True`` by default and remove all
+**documented** bad trials, this means that no algorithms are implemented
+here, only the database owners recommendations.
+
+.. code:: ipython3
+
+    db = loaddb.GIGA('GIGA')
+    db.load_subject(6)
+    
+    trials_cln, _ = db.get_data(reject_bad_trials=True)
+    trials_raw, _ = db.get_data(reject_bad_trials=False)
+    
+    print(f"Cleaned trials shape:\t{trials_cln.shape}")
+    print(f"Raw trials shape:\t\t{trials_raw.shape}")
+
+
+.. parsed-literal::
+
+    Cleaned trials shape:	(178, 64, 3584)
+    Raw trials shape:		(200, 64, 3584)
+
+
+This argument is avalibale to for ``get_run`` methods:
+
+.. code:: ipython3
+
+    trials_cln, _ = db.get_run(0, reject_bad_trials=True)
+    trials_raw, _ = db.get_run(0, reject_bad_trials=False)
+    
+    print(f"Cleaned trials shape:\t{trials_cln.shape}")
+    print(f"Raw trials shape:\t\t{trials_raw.shape}")
+
+
+.. parsed-literal::
+
+    Cleaned trials shape:	(36, 64, 3584)
+    Raw trials shape:		(40, 64, 3584)
+
+
+NOTE: *GIGA* database has only 1 run, the methods ``get_data()`` and
+``get_run(0)`` will return the same data.
 
 --------------
 
