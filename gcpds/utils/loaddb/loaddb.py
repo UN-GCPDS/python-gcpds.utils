@@ -17,7 +17,7 @@ class GIGA(Database):
         self.data = data['eeg'][0][0]
 
     # ----------------------------------------------------------------------
-    def get_run(self, run: int, Reject_bad_trials: bool, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
+    def get_run(self, run: int, reject_bad_trials: Optional(bool) = True, classes: Optional[list] = ALL, channels: Optional[list] = ALL) -> Tuple[np.ndarray, np.ndarray]:
         """"""
         classes = self.format_class_selector(classes)
         channels = self.format_channels_selectors(channels)
@@ -28,27 +28,32 @@ class GIGA(Database):
 
         # Split in runs and select the specified run
         trials_count = self.data[9][0][0]
-        cues = np.array([all_cues[i:i + 20] for i in range(0, trials_count, 20)][run])
+        cues = np.array([all_cues[i:i + 20]
+                         for i in range(0, trials_count, 20)][run])
 
         start = (self.metadata['sampling_rate'] * 2) - 1
         end = (self.metadata['sampling_rate'] * 5) + 1
         # reject bad trial
-        if Reject_bad_trials:
-            bad_trials=[]
+        if reject_bad_trials:
+            bad_trials = []
             for cls in classes:
-                trials_runs = np.ones((trials_count,),dtype=bool)
-                tmp=self.data[14][0][0][1][0][cls]#14 bad trials--bad trials MI
-                if len(tmp)!=0:
-                    trials_runs[tmp-1]=0
-                bad_trials.extend([trials_runs[i:i + 20] for i in range(0, trials_count, 20)])
+                trials_runs = np.ones((trials_count,), dtype=bool)
+                # 14 bad trials--bad trials MI
+                tmp = self.data[14][0][0][1][0][cls]
+                if len(tmp) != 0:
+                    trials_runs[tmp - 1] = 0
+                bad_trials.extend([trials_runs[i:i + 20]
+                                   for i in range(0, trials_count, 20)])
         #
         trials = []
         classes_out = []
         for cls in classes:
             data = self.data[7 + cls]  # classes starts in index 7
-            if Reject_bad_trials:
-                cues_r = cues[bad_trials[(cls*self.runs)+run]]  #cls*max_runs -- run-1
-                trials.extend([data[:, cue - start:cue + end] for cue in cues_r])
+            if reject_bad_trials:
+                # cls*max_runs -- run-1
+                cues_r = cues[bad_trials[(cls * self.runs) + run]]
+                trials.extend([data[:, cue - start:cue + end]
+                               for cue in cues_r])
                 classes_out.extend([cls] * len(cues_r))
             else:
                 trials.extend([data[:, cue - start:cue + end] for cue in cues])
