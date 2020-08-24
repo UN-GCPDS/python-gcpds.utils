@@ -158,7 +158,7 @@ class HighGamma(Database):
 
         start = np.int(
             (self.metadata['sampling_rate'] * self.metadata['tmin']) - 1)
-        end = (self.metadata['sampling_rate'] * 2) + 1
+        end = (self.metadata['sampling_rate'] * 4) + 1
 
         data = np.concatenate(
             [getattr(self.data, f"ch{ch+1}") for ch in channels])

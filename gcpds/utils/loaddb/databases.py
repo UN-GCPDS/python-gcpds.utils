@@ -49,7 +49,7 @@ highgamma = {
     'classes': ['right hand', 'left hand', 'rest', 'feet'],
     'sampling_rate': 500,
     'montage': 'standard_1005',
-    'tmin': -0.5,
+    'tmin': 0,
     'reference': '',
     'runs_training': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     'runs_evaluation': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
