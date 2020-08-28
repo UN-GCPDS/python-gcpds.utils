@@ -7,17 +7,17 @@ SHARED_DRIVE = 'GCPDS'
 
 
 # ----------------------------------------------------------------------
-def mount():
+def mount(shared_drive=SHARED_DRIVE):
     """"""
     mount_dst = os.path.join('/', 'content', 'drive')
     drive.mount(mount_dst, force_remount=False)
 
-    gcpds_drive = os.path.join(mount_dst, 'Shared drives', SHARED_DRIVE)
+    gcpds_drive = os.path.join(mount_dst, 'Shared drives', shared_drive)
     if not os.path.exists(gcpds_drive):
         logging.warning(
-            f"You haven't access to {SHARED_DRIVE} shared drive, ask for one.")
+            f"You haven't access to {shared_drive} shared drive, ask for one.")
         return
 
     os.chdir(gcpds_drive)
     logging.warning(
-        f"Your working directory is now the root of the shared drive '{SHARED_DRIVE}'.")
+        f"Your working directory is now the root of the shared drive '{shared_drive}'.")
