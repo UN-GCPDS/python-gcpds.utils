@@ -128,6 +128,28 @@ rate.
 .. image:: 02-filters_files/02-filters_10_0.png
 
 
+For brain waves.
+
+.. code:: ipython3
+
+    plt.figure(figsize=(9, 5), dpi=90)
+    
+    for i, filter_ in enumerate([flt.delta, flt.theta, flt.alpha, flt.beta]):
+        eeg_ = filter_(trial, fs=250)
+        eeg_ = eeg_/(eeg_.max()-eeg_.min())
+        plt.plot(t, eeg_+i)
+        
+    plt.grid(True)
+    plt.yticks(range(5), ['Delta', 'Theta', 'Alpha', 'Beta'])
+    plt.xlabel('Time [s]')
+    
+    plt.show()
+
+
+
+.. image:: 02-filters_files/02-filters_12_0.png
+
+
 --------------
 
 References
@@ -139,3 +161,4 @@ References
    filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.iirnotch.html#scipy.signal.iirnotch>`__
 -  `Apply a digital filter forward and backward to a
    signal. <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.filtfilt.html#scipy.signal.filtfilt>`__
+

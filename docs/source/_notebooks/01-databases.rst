@@ -191,9 +191,6 @@ This argument is avalibale to for ``get_run`` methods:
     Raw trials shape:		(40, 64, 3584)
 
 
-NOTE: *GIGA* database has only 1 run, the methods ``get_data()`` and
-``get_run(0)`` will return the same data.
-
 --------------
 
 References

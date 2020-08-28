@@ -10,9 +10,10 @@ Navigation
 
    _notebooks/01-databases
    _notebooks/02-filters
-   _notebooks/03-visualizations
+   _notebooks/03-processing
    _notebooks/04-mne_integrations
-   _notebooks/05-distutils
+   _notebooks/05-visualizations
+   _notebooks/06-distutils
 
 
 
