@@ -6,5 +6,5 @@ This package is a set of useful Python scripts for *Database handler*, *EEG filt
 
 
 ```python
-pip install -U gcpds-utils 
+pip install -U git+https://github.com/UN-GCPDS/python-gcpds.utils.git
 ```
