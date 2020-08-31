@@ -191,6 +191,75 @@ This argument is avalibale to for ``get_run`` methods:
     Raw trials shape:		(40, 64, 3584)
 
 
+Download metadata
+-----------------
+
+Some databases has associated information like: papers, readme,
+contents; this metadata can be downloaded with the method
+``get_metadata()``
+
+.. code:: ipython3
+
+    db = loaddb.GIGA('GIGA')
+    db.get_metadata()
+
+
+.. parsed-literal::
+
+    Downloading 1-59y5Q9Nt6L8dq_QMsYhlSfLV36_KLuN into GIGA/metadata/cho2017.pdf... 
+
+
+
+.. parsed-literal::
+
+    HBox(children=(FloatProgress(value=0.0, description='GIGA/metadata/cho2017.pdf', max=51.470489501953125, style…
+
+
+.. parsed-literal::
+
+    
+    Done.
+    Downloading 12qRbFvF21OOOJZ_vrhRGWa2ykli2vpIs into GIGA/metadata/Questionnaire_results_of_52_subjects.xlsx... 
+
+
+
+.. parsed-literal::
+
+    HBox(children=(FloatProgress(value=0.0, description='GIGA/metadata/Questionnaire_results_of_52_subjects.xlsx',…
+
+
+.. parsed-literal::
+
+    
+    Done.
+    Downloading 12tko40nhuE2kFgFvJjanv_qE3FmH4wtJ into GIGA/metadata/readme.txt... 
+
+
+
+.. parsed-literal::
+
+    HBox(children=(FloatProgress(value=0.0, description='GIGA/metadata/readme.txt', max=0.068267822265625, style=P…
+
+
+.. parsed-literal::
+
+    
+    Done.
+    Downloading 12ums2JR9Wr_PaI9t46sJrubMo82Uzigi into GIGA/metadata/trial_sequence.zip... 
+
+
+
+.. parsed-literal::
+
+    HBox(children=(FloatProgress(value=0.0, description='GIGA/metadata/trial_sequence.zip', max=1.278961181640625,…
+
+
+.. parsed-literal::
+
+    
+    Done.
+
+
 --------------
 
 References
