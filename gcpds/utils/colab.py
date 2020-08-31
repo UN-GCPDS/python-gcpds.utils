@@ -7,10 +7,10 @@ SHARED_DRIVE = 'GCPDS'
 
 
 # ----------------------------------------------------------------------
-def mount(shared_drive=SHARED_DRIVE):
+def mount(shared_drive=SHARED_DRIVE, force_remount=False):
     """"""
     mount_dst = os.path.join('/', 'content', 'drive')
-    drive.mount(mount_dst, force_remount=False)
+    drive.mount(mount_dst, force_remount=force_remount)
 
     gcpds_drive = os.path.join(mount_dst, 'Shared drives', shared_drive)
     if not os.path.exists(gcpds_drive):
