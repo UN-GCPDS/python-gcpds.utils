@@ -21,6 +21,8 @@ giga = {
 
     'subject_evaluation_files': {},
     'subject_evaluation_pattern': lambda subject: f'{subject}.mat',
+
+    'metadata': fids['GIGA metadata'],
 }
 
 
@@ -40,6 +42,8 @@ bci2a = {
 
     'subject_evaluation_files': fids['BCI2a evaluation'],
     'subject_evaluation_pattern': lambda subject: f'A{str(subject).rjust(2, "0")}E.mat',
+
+    'metadata': fids['BCI2a metadata'],
 
 }
 
@@ -61,6 +65,7 @@ highgamma = {
     'subject_evaluation_files': fids['HighGamma evaluation'],
     'subject_evaluation_pattern': lambda subject: os.path.join('test', f'{subject}.mat'),
 
+    'metadata': fids['HighGamma metadata'],
 }
 
 

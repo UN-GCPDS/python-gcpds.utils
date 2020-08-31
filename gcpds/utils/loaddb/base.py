@@ -52,6 +52,19 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
         return load_mat(path, mat, fid, size)
 
 
+# ----------------------------------------------------------------------
+def download_metadata(path, metadata):
+    """"""
+    os.makedirs(path, exist_ok=True)
+    for file in metadata:
+        fid, size = metadata[file]
+        gdd.download_file_from_google_drive(file_id=fid,
+                                            dest_path=os.path.join(path, file),
+                                            unzip=False,
+                                            overwrite=True,
+                                            size=size)
+
+
 ########################################################################
 class Database(metaclass=ABCMeta):
     """"""
@@ -181,4 +194,10 @@ class Database(metaclass=ABCMeta):
         event_id = {e: i for i, e in enumerate(self.metadata['classes'])}
 
         return mne.EpochsArray(data, info, events=events, tmin=self.metadata['tmin'], event_id=event_id, **kwargs)
+
+    # ----------------------------------------------------------------------
+    def get_metadata(self):
+        """"""
+        download_metadata(os.path.join(self.path, 'metadata'),
+                          self.metadata['metadata'])
 
