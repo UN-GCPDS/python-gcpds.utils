@@ -103,12 +103,13 @@ class BCI2a(Database):
         classes = self.format_class_selector(classes)
         channels = self.format_channels_selectors(channels)
         super().get_run(run, classes, channels, reject_bad_trials)
+        artifacts = self.data[3 + run][0][0][5].T[0] == 1
 
         # A04T contains only the eye movement condition
         if self.subject == 4 and self.mode == 'training':
             run = run - 2
 
-        classes_list = [i[0] for i in self.data[3 + run][0][0][2]]
+        classes_list = np.array([i[0] for i in self.data[3 + run][0][0][2]])
         starts = [s[0] for s in self.data[3 + run][0][0][1]]
         run = np.array([self.data[3 + run][0][0][0][start:start +
                                                     (self.metadata['sampling_rate'] * 7)] for start in starts])
@@ -119,7 +120,13 @@ class BCI2a(Database):
         # Select channels
         run = run[:, :, channels]
 
+        # trial x channel x time
         run = np.moveaxis(run, 2, 1)
+
+        # reject bad trials
+        if reject_bad_trials:
+            run = run[~artifacts]
+            classes_list = classes_list[~artifacts]
 
         idx = []
         c = []
