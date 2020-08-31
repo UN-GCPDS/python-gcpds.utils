@@ -1,3 +1,7 @@
+.. code:: ipython3
+
+    import os
+
 Databases handler
 =================
 
@@ -196,12 +200,14 @@ Download metadata
 
 Some databases has associated information like: papers, readme,
 contents; this metadata can be downloaded with the method
-``get_metadata()``
+``get_metadata()``, this will create a new folder called metadata.
 
 .. code:: ipython3
 
     db = loaddb.GIGA('GIGA')
     db.get_metadata()
+    
+    os.listdir(os.path.join('GIGA', 'metadata'))
 
 
 .. parsed-literal::
@@ -258,6 +264,17 @@ contents; this metadata can be downloaded with the method
 
     
     Done.
+
+
+
+
+.. parsed-literal::
+
+    ['Questionnaire_results_of_52_subjects.xlsx',
+     'cho2017.pdf',
+     'readme.txt',
+     'trial_sequence.zip']
+
 
 
 --------------
