@@ -54,6 +54,7 @@ highgamma = {
     'sampling_rate': 500,
     'montage': 'standard_1005',
     'tmin': 0,
+    'duration': 4,
     'reference': '',
     'runs_training': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     'runs_evaluation': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
