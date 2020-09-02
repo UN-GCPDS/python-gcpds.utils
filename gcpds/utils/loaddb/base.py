@@ -11,6 +11,8 @@ import mne
 import tables
 import logging
 import warnings
+import string
+import random
 
 ALL = 'all'
 
@@ -65,14 +67,23 @@ def download_metadata(path, metadata):
                                             size=size)
 
 
+# ----------------------------------------------------------------------
+def get_menmap_filename():
+    """"""
+    filename = ''.join([random.choice(string.ascii_lowercase)
+                        for i in range(16)])
+    return f'{filename}.menmap'
+
+
 ########################################################################
 class Database(metaclass=ABCMeta):
     """"""
 
     # ----------------------------------------------------------------------
-    def __init__(self, path: Optional[str] = '.') -> None:
+    def __init__(self, path: Optional[str] = '.', usemenmap: Optional[bool] = False) -> None:
         """Constructor"""
         self.path = path
+        self.usemenmap = usemenmap
 
     # ----------------------------------------------------------------------
     @abstractmethod
@@ -96,6 +107,19 @@ class Database(metaclass=ABCMeta):
         self.runs = self.metadata[f'runs_{mode}'][subject - 1]
         # self.data = load_mat(self.path, filename_subject, fid)['eeg'][0][0]
         return load_mat(self.path, filename_subject, fid, size)
+
+    # ----------------------------------------------------------------------
+    def to_menmap(self, array):
+        """"""
+        array = np.array(array.tolist())
+
+        filename = os.path.join(self.path, get_menmap_filename())
+        fp = np.memmap(filename, dtype=array.dtype,
+                       mode='w+', shape=array.shape)
+        fp[:] = array[:]
+        del array, fp
+        mmap = np.memmap(filename, mode='r')
+        return mmap
 
     # ----------------------------------------------------------------------
     @abstractmethod
@@ -225,7 +249,6 @@ class BCIilliteracy(Database):
             self.subject = subject
             self.mode = mode
 
-            # self.data = load_mat(self.path, filename_subject, fid)['eeg'][0][0]
             sessions.append(load_mat(self.path, filename_subject, fid, size))
 
         return sessions

@@ -33,8 +33,9 @@ class GIGA(Database):
         cues = np.array([all_cues[i:i + 20]
                          for i in range(0, trials_count, 20)][run])
 
-        start = (self.metadata['sampling_rate'] * 2)
-        end = int(self.metadata['sampling_rate'] * self.metadata['duration'])
+        start = (self.metadata['sampling_rate'] * 2) - 1
+        end = int(self.metadata['sampling_rate']
+                  * self.metadata['duration']) + 1
 
         # reject bad trial
         if reject_bad_trials:
@@ -188,12 +189,12 @@ class BCIilliteracy_MI(BCIilliteracy):
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
-        self.data_ = super().load_subject(subject, mode)
+        data_ = super().load_subject(subject, mode)
 
         if mode == 'training':
-            self.data_ = [d['EEG_MI_train'][0][0] for d in self.data_]
+            self.data_ = [d['EEG_MI_train'][0][0] for d in data_]
         elif mode == 'evaluation':
-            self.data_ = [d['EEG_MI_test'][0][0] for d in self.data_]
+            self.data_ = [d['EEG_MI_test'][0][0] for d in data_]
 
 
 ########################################################################
@@ -204,12 +205,12 @@ class BCIilliteracy_ERP(BCIilliteracy):
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
-        self.data_ = super().load_subject(subject, mode)
+        data_ = super().load_subject(subject, mode)
 
         if mode == 'training':
-            self.data_ = [d['EEG_ERP_train'][0][0] for d in self.data_]
+            self.data_ = [d['EEG_ERP_train'][0][0] for d in data_]
         elif mode == 'evaluation':
-            self.data_ = [d['EEG_ERP_test'][0][0] for d in self.data_]
+            self.data_ = [d['EEG_ERP_test'][0][0] for d in data_]
 
 
 ########################################################################
@@ -220,9 +221,9 @@ class BCIilliteracy_SSVEP(BCIilliteracy):
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
-        self.data_ = super().load_subject(subject, mode)
+        data_ = super().load_subject(subject, mode)
 
         if mode == 'training':
-            self.data_ = [d['EEG_SSVEP_train'][0][0] for d in self.data_]
+            data_ = [d['EEG_SSVEP_train'][0][0] for d in data_]
         elif mode == 'evaluation':
-            self.data_ = [d['EEG_SSVEP_test'][0][0] for d in self.data_]
+            data_ = [d['EEG_SSVEP_test'][0][0] for d in data_]
