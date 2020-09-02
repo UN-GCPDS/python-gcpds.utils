@@ -1,5 +1,5 @@
 
-from .base import Database, ALL
+from .base import Database, BCIilliteracy, ALL
 from typing import Optional, Tuple
 import numpy as np
 from . import databases
@@ -34,8 +34,9 @@ class GIGA(Database):
         cues = np.array([all_cues[i:i + 20]
                          for i in range(0, trials_count, 20)][run])
 
-        start = (self.metadata['sampling_rate'] * 2) - 1
-        end = (self.metadata['sampling_rate'] * 5) + 1
+        start = (self.metadata['sampling_rate'] * 2)
+        end = int(self.metadata['sampling_rate'] * self.metadata['duration'])
+
         # reject bad trial
         if reject_bad_trials:
             bad_trials = []
@@ -111,8 +112,10 @@ class BCI2a(Database):
 
         classes_list = np.array([i[0] for i in self.data[3 + run][0][0][2]])
         starts = [s[0] for s in self.data[3 + run][0][0][1]]
-        run = np.array([self.data[3 + run][0][0][0][start:start +
-                                                    (self.metadata['sampling_rate'] * 7)] for start in starts])
+        end = int(self.metadata['sampling_rate'] * self.metadata['duration'])
+
+        run = np.array([self.data[3 + run][0][0][0][start:start + end]
+                        for start in starts])
 
         # Remove EOG
         run = run[:, :, :22]
@@ -161,16 +164,13 @@ class HighGamma(Database):
         super().get_run(run, classes, channels, reject_bad_trials)
 
         classes_list = self.data_mrk.event.desc.read()[0]
-        cues = ((self.data_mrk.time.read() / 1000) * 500).T[0].astype(int)
-
-        start = np.int(
-            (self.metadata['sampling_rate'] * self.metadata['tmin']) - 1)
-        end = (self.metadata['sampling_rate'] * 4) + 1
+        starts = ((self.data_mrk.time.read() / 1000) * 500).T[0].astype(int)
+        end = int(self.metadata['sampling_rate'] * self.metadata['duration'])
 
         data = np.concatenate(
             [getattr(self.data, f"ch{ch+1}") for ch in channels])
 
-        run = np.array([data[:, cue + start:cue + end] for cue in cues])
+        run = np.array([data[:, start:start + end] for starts in starts])
 
         idx = []
         c = []
@@ -179,3 +179,51 @@ class HighGamma(Database):
             c.append([cls] * len(idx[-1]))
 
         return run[np.concatenate(idx), :, :], np.concatenate(c)
+
+
+########################################################################
+class BCIilliteracy_MI(BCIilliteracy):
+    """"""
+    metadata = databases.bciilliteracy_mi
+
+    # ----------------------------------------------------------------------
+    def load_subject(self, subject: int, mode: str = 'training') -> None:
+        """"""
+        self.data_ = super().load_subject(subject, mode)
+
+        if mode == 'training':
+            self.data_ = [d['EEG_MI_train'][0][0] for d in self.data_]
+        elif mode == 'evaluation':
+            self.data_ = [d['EEG_MI_test'][0][0] for d in self.data_]
+
+
+########################################################################
+class BCIilliteracy_ERP(BCIilliteracy):
+    """"""
+    metadata = databases.bciilliteracy_mi
+
+    # ----------------------------------------------------------------------
+    def load_subject(self, subject: int, mode: str = 'training') -> None:
+        """"""
+        self.data_ = super().load_subject(subject, mode)
+
+        if mode == 'training':
+            self.data_ = [d['EEG_ERP_train'][0][0] for d in self.data_]
+        elif mode == 'evaluation':
+            self.data_ = [d['EEG_ERP_test'][0][0] for d in self.data_]
+
+
+########################################################################
+class BCIilliteracy_SSVEP(BCIilliteracy):
+    """"""
+    metadata = databases.bciilliteracy_mi
+
+    # ----------------------------------------------------------------------
+    def load_subject(self, subject: int, mode: str = 'training') -> None:
+        """"""
+        self.data_ = super().load_subject(subject, mode)
+
+        if mode == 'training':
+            self.data_ = [d['EEG_SSVEP_train'][0][0] for d in self.data_]
+        elif mode == 'evaluation':
+            self.data_ = [d['EEG_SSVEP_test'][0][0] for d in self.data_]
