@@ -6,9 +6,8 @@ from . import databases
 import warnings
 import logging
 
+
 ########################################################################
-
-
 class GIGA(Database):
     """"""
     metadata = databases.giga

@@ -212,8 +212,7 @@ class BCIilliteracy(Database):
         self.runs = self.metadata[f'runs'][subject - 1]
 
         sessions = []
-        # for run in range(self.runs):
-        for run in [0, 0]:
+        for run in range(self.runs):
             filename_subject = self.metadata[f'subject_pattern'](
                 subject, run + 1)
 
