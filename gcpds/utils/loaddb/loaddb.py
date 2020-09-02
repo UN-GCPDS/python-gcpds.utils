@@ -170,7 +170,7 @@ class HighGamma(Database):
         data = np.concatenate(
             [getattr(self.data, f"ch{ch+1}") for ch in channels])
 
-        run = np.array([data[:, start:start + end] for starts in starts])
+        run = np.array([data[:, start:start + end] for start in starts])
 
         idx = []
         c = []
