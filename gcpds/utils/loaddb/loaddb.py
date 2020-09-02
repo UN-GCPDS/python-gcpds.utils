@@ -200,7 +200,7 @@ class BCIilliteracy_MI(BCIilliteracy):
 ########################################################################
 class BCIilliteracy_ERP(BCIilliteracy):
     """"""
-    metadata = databases.bciilliteracy_mi
+    metadata = databases.bciilliteracy_erp
 
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
@@ -216,7 +216,7 @@ class BCIilliteracy_ERP(BCIilliteracy):
 ########################################################################
 class BCIilliteracy_SSVEP(BCIilliteracy):
     """"""
-    metadata = databases.bciilliteracy_mi
+    metadata = databases.bciilliteracy_ssvep
 
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
