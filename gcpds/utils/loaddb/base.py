@@ -242,7 +242,7 @@ class BCIilliteracy(Database):
 
         classes_list = data[4][0]
         starts = data[2][0]
-        end = (self.metadata['sampling_rate'] * 10)
+        end = int(self.metadata['sampling_rate'] * self.metadata['duration'])
 
         run = np.array([data[1][start:start + end] for start in starts])
 
