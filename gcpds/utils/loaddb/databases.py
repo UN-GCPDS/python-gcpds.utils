@@ -79,8 +79,8 @@ bciilliteracy_mi = {
     'reference': '',
     'runs': [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 
-    'subject_files': fids['BCIilliteracy'],
-    'subject_pattern': lambda subject, run: os.path.join(f'session{run}', f's{subject}', f'sess{str(run).rjust(2, "0")}_subj{str(subject).rjust(2, "0")}_EEG_MI.mat'),
+    'subject_files': list(filter(lambda f: 'MI' in f, fids['BCIilliteracy'])),
+    'subject_pattern': lambda subject, run: os.path.join(f'session{run}', f'sess{str(run).rjust(2, "0")}_subj{str(subject).rjust(2, "0")}_EEG_MI.mat'),
 
     'metadata': fids['BCIilliteracy metadata'],
 
@@ -92,7 +92,8 @@ bciilliteracy_erp.update({
     'classes': ['target', 'nontarget'],
     'tmin': -4.5,
     'duration': 14.5,
-    'subject_pattern': lambda subject, run: os.path.join(f'session{run}', f's{subject}', f'sess{str(run).rjust(2, "0")}_subj{str(subject).rjust(2, "0")}_EEG_ERP.mat'),
+    'subject_files': list(filter(lambda f: 'ERP' in f, fids['BCIilliteracy'])),
+    'subject_pattern': lambda subject, run: os.path.join(f'session{run}', f'sess{str(run).rjust(2, "0")}_subj{str(subject).rjust(2, "0")}_EEG_ERP.mat'),
 })
 
 
@@ -101,5 +102,6 @@ bciilliteracy_ssvep.update({
     'classes': ['up', 'left', 'right', 'down'],
     'tmin': -4,
     'duration': 8,
-    'subject_pattern': lambda subject, run: os.path.join(f'session{run}', f's{subject}', f'sess{str(run).rjust(2, "0")}_subj{str(subject).rjust(2, "0")}_EEG_SSVEP.mat'),
+    'subject_files': list(filter(lambda f: 'SSVEP' in f, fids['BCIilliteracy'])),
+    'subject_pattern': lambda subject, run: os.path.join(f'session{run}', f'sess{str(run).rjust(2, "0")}_subj{str(subject).rjust(2, "0")}_EEG_SSVEP.mat'),
 })
