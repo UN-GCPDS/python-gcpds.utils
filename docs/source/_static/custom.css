@@ -98,3 +98,55 @@ dl:not(.docutils) dl dt {
 .body > .highlight-ipython3 {
     display: none;
 }
+
+
+div.figure p.caption {
+    display: none;
+}
+
+/*table {*/
+    /*border-collapse: collapse !important;*/
+    /*border-spacing: 0 !important;*/
+    /*border: none !important;*/
+    /*color: var(--jp-ui-font-color1) !important;*/
+    /*font-size: 12px !important;*/
+    /*table-layout: fixed !important;*/
+    /*margin-left: auto !important;*/
+    /*margin-right: auto !important;*/
+/*}*/
+
+/*thead {*/
+    /*border-bottom: var(--jp-border-width) solid var(--jp-border-color1) !important;*/
+    /*vertical-align: bottom !important;*/
+/*}*/
+
+/*td,*/
+/*th,*/
+/*tr {*/
+    /*vertical-align: middle !important;*/
+    /*padding: 0.5em 0.5em !important;*/
+    /*line-height: normal !important;*/
+    /*white-space: normal !important;*/
+    /*max-width: none !important;*/
+    /*border: none !important;*/
+/*}*/
+
+/*td,*/
+/*th {*/
+    /*max-width: none !important;*/
+/*}*/
+
+/*th {*/
+    /*font-weight: bold !important;*/
+/*}*/
+
+/*td,*/
+/*th,*/
+/*tr {*/
+    /*vertical-align: middle !important;*/
+    /*padding: 0.5em 0.5em !important;*/
+    /*line-height: normal !important;*/
+    /*white-space: normal !important;*/
+    /*max-width: none !important;*/
+    /*border: none !important;*/
+/*}*/
