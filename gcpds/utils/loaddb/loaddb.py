@@ -224,6 +224,6 @@ class BCIilliteracy_SSVEP(BCIilliteracy):
         data_ = super().load_subject(subject, mode)
 
         if mode == 'training':
-            data_ = [d['EEG_SSVEP_train'][0][0] for d in data_]
+            self.data_ = [d['EEG_SSVEP_train'][0][0] for d in data_]
         elif mode == 'evaluation':
-            data_ = [d['EEG_SSVEP_test'][0][0] for d in data_]
+            self.data_ = [d['EEG_SSVEP_test'][0][0] for d in data_]
