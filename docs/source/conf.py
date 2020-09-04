@@ -112,10 +112,12 @@ autodoc_mock_imports = [
     'scipy',
     'mne',
     'matplotlib',
-    'google.colab',
+    'google',
     'colorama',
     'tqdm',
-    'pandas'
+    'pandas',
+    'tables',
+
     # 'base_server.WSHandler_Serial',
     # 'base_server.WSHandler_WiFi',
     # 'ws.base_server',
