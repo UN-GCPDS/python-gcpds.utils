@@ -3,5 +3,5 @@ formats: all
 python:
   version: 3
   install:
-    - requirements: doc/requirements
+    - requirements: docs/requirements
   system_packages: true 
