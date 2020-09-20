@@ -36,7 +36,9 @@ extensions = [
 
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.todo',
-    'IPython.sphinxext.ipython_console_highlighting',
+
+    'nbsphinx',
+    'sphinx.ext.mathjax',
 ]
 
 naoleon_google_docstring = False
@@ -131,22 +133,42 @@ todo_include_todos = True
 
 
 def setup(app):
-    app.add_stylesheet("custom.css")
+    app.add_css_file("custom.css")
 
 
-notebooks = os.listdir(os.path.join(
-    os.path.abspath(os.path.dirname(__file__)), '_notebooks'))
+highlight_language = 'none'
+html_sourcelink_suffix = ''
 
-index = []
-for notebook in notebooks:
-    if notebook != 'readme.rst' and notebook.endswith('.rst'):
-        index.append(f"_notebooks/{notebook.replace('.rst', '')}")
+# suppress_warnings = [
+    # 'nbsphinx',
+# ]
 
-index = sorted(index)
+nbsphinx_execute_arguments = [
+    "--InlineBackend.figure_formats={'svg', 'pdf'}",
+    "--InlineBackend.rc={'figure.dpi': 96}",
+]
+
+nbsphinx_execute = 'never'
+# nbsphinx_input_prompt = 'In [%s]:'
+# nbsphinx_output_prompt = 'Out[%s]:'
+nbsphinx_kernel_name = 'python3'
+
+
+notebooks_dir = 'notebooks'
+
+notebooks_list = os.listdir(os.path.join(
+    os.path.abspath(os.path.dirname(__file__)), notebooks_dir))
+
+notebooks = []
+for notebook in notebooks_list:
+    if notebook != 'readme.ipynb' and notebook.endswith('.ipynb'):
+        notebooks.append(f"{notebooks_dir}/{notebook.replace('.ipynb', '')}")
+
+notebooks = sorted(notebooks)
 
 with open('index.rst', 'w') as file:
     file.write("""
-.. include:: _notebooks/readme.rst
+.. include:: {notebooks_dir}/readme.rst
 
 Navigation
 ^^^^^^^^^^
@@ -155,8 +177,7 @@ Navigation
    :maxdepth: 2
    :name: mastertoc
 
-   {index}
-
+   {notebooks}
 
 
 Indices and tables
@@ -166,4 +187,10 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-    """.format(index='\n   '.join(index)))
+    """.format(notebooks='\n   '.join(notebooks), notebooks_dir=notebooks_dir))
+
+os.system("jupyter nbconvert --to rst notebooks/readme.ipynb")
+os.system("jupyter nbconvert --to markdown notebooks/readme.ipynb")
+os.system("mv notebooks/readme.md ../../README.md")
+
+

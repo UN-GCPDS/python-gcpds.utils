@@ -1,5 +1,5 @@
 
-.. include:: _notebooks/readme.rst
+.. include:: notebooks/readme.rst
 
 Navigation
 ^^^^^^^^^^
@@ -8,14 +8,13 @@ Navigation
    :maxdepth: 2
    :name: mastertoc
 
-   _notebooks/01-database_handler
-   _notebooks/02-databases
-   _notebooks/03-filters
-   _notebooks/04-mne_integrations
-   _notebooks/05-processing
-   _notebooks/06-distutils
-   _notebooks/07-visualizations
-
+   notebooks/01-database_handler
+   notebooks/02-databases
+   notebooks/03-filters
+   notebooks/04-mne_integrations
+   notebooks/05-processing
+   notebooks/06-distutils
+   notebooks/07-visualizations
 
 
 Indices and tables
