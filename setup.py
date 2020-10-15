@@ -23,14 +23,16 @@ setup(
                       'matplotlib',
                       'mne',
                       'tables',
-
-                      'jinja2',
-                      'colorama',
-                      'sphinx',
-                      'ipython',
                       'tqdm',
-
                       ],
+
+    extras_require={
+        'utils': ['sphinx',
+                  'colorama',
+                  'jinja2',
+                  'ipython',
+                  ],
+    },
 
     scripts=[
        "cmd/gcpds_distutils",
