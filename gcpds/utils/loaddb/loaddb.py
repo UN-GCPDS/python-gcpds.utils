@@ -52,7 +52,8 @@ class GIGA(Database):
         trials = []
         classes_out = []
         for cls in classes:
-            data = self.data[7 + cls]  # classes starts in index 7
+            data = self.
+            [7 + cls]  # classes starts in index 7
             if reject_bad_trials:
                 # cls*max_runs -- run-1
                 x = bad_trials[(cls * self.runs) + run]
@@ -78,13 +79,13 @@ class GIGA(Database):
 
         return run, np.array(classes_out)
 
-    # # ----------------------------------------------------------------------
-    # def resting(self, channels: Optional[list] = ALL) -> np.ndarray:
-        # """"""
-        # channels = self.format_channels_selectors(channels)
-        # resting = self.data[1]
-        # resting = resting[channels]
-        # return resting
+    # ----------------------------------------------------------------------
+    def resting(self, channels: Optional[list] = ALL) -> np.ndarray:
+        """"""
+        channels = self.format_channels_selectors(channels)
+        resting = self.data[1]
+        resting = resting[channels]
+        return resting
 
 
 ########################################################################
