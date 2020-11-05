@@ -52,8 +52,7 @@ class GIGA(Database):
         trials = []
         classes_out = []
         for cls in classes:
-            data = self.
-            [7 + cls]  # classes starts in index 7
+            data = self.data[7 + cls]  # classes starts in index 7
             if reject_bad_trials:
                 # cls*max_runs -- run-1
                 x = bad_trials[(cls * self.runs) + run]
