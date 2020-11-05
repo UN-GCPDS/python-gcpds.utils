@@ -193,9 +193,10 @@ class Database(metaclass=ABCMeta):
         channels_missings = set(self.metadata['channel_names']).difference(
             set(montage.ch_names))
 
-        logging.warning(
-            f"Missing {channels_missings} channels in {self.metadata['montage']} montage.\n"
-            f"Missing channels will be removed from MNE Epochs")
+        if channels_missings:
+            logging.warning(
+                f"Missing {channels_missings} channels in {self.metadata['montage']} montage.\n"
+                f"Missing channels will be removed from MNE Epochs")
 
         info = mne.create_info(
             list(channels_names), sfreq=self.metadata['sampling_rate'], ch_types="eeg")
