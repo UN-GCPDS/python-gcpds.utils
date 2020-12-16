@@ -175,7 +175,7 @@ class Database(metaclass=ABCMeta):
         """
 
         if channels != ALL:
-            channels = [(self.metadata['channel_names'].index(ch) + 1) if isinstance(ch, str) else (ch) for ch in channels]
+            channels = [(list(map(str.lower, self.metadata['channel_names'])).index(ch.lower()) + 1) if isinstance(ch, str) else (ch) for ch in channels]
         else:
             channels = list(range(1, len(self.metadata['channel_names']) + 1))
 
@@ -207,7 +207,7 @@ class Database(metaclass=ABCMeta):
                 # f"Missing {channels_missings} channels in {self.metadata['montage']} montage.\n"
                 # f"Missing channels will be removed from MNE Epochs")
 
-        montage = mne.channels.make_standard_montage(montage_name)
+        montage = mne.channels.make_standard_montage(self.metadata['montage'])
 
         # Channels names with the MNE standard capitalization
         source = self.metadata['channel_names']
