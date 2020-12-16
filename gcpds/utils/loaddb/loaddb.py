@@ -39,15 +39,15 @@ class GIGA(Database):
 
         # reject bad trial
         if reject_bad_trials:
-            bad_trials = []
+            bad_trials = {}
             for cls in classes:
                 trials_runs = np.ones((trials_count,), dtype=bool)
                 # 14 bad trials--bad trials MI
                 tmp = self.data[14][0][0][1][0][cls]
                 if len(tmp) != 0:
                     trials_runs[tmp - 1] = 0
-                bad_trials.extend([trials_runs[i:i + 20]
-                                   for i in range(0, trials_count, 20)])
+                bad_trials[cls] = [trials_runs[i:i + 20]
+                                   for i in range(0, trials_count, 20)]
         #
         trials = []
         classes_out = []
@@ -55,7 +55,8 @@ class GIGA(Database):
             data = self.data[7 + cls]  # classes starts in index 7
             if reject_bad_trials:
                 # cls*max_runs -- run-1
-                x = bad_trials[(cls * self.runs) + run]
+                # x = bad_trials[(cls * self.runs) + run]
+                x = bad_trials[cls][run]
                 cues_r = cues[x]
                 if len(cues_r):
                     trials.extend([data[:, cue - start:cue + end]
