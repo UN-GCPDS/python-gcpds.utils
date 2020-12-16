@@ -176,7 +176,7 @@ class Database(metaclass=ABCMeta):
 
         if channels != ALL:
             channels = [self.metadata['channel_names'].index(
-                ch) if isinstance(ch, str) else (ch - 1) for ch in channels]
+                ch) if isinstance(ch, str) else (ch) for ch in channels]
         else:
             channels = list(range(1, len(self.metadata['channel_names']) + 1))
 
