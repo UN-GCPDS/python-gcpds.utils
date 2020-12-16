@@ -280,7 +280,7 @@ class BCIilliteracy(Database):
         run = np.moveaxis(run, 2, 1)
 
         # Select channels
-        run = run[:, channels, :]
+        run = run[:, channels - 1, :]
 
         idx = []
         c = []
