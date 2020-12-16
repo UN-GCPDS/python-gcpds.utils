@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='gcpds-utils',
-    version='0.1a2',
+    version='0.1a3',
     packages=['gcpds.utils'],
 
     author='Yeison Cardona',

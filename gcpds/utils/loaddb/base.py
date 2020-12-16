@@ -13,6 +13,7 @@ import logging
 import warnings
 
 ALL = 'all'
+mne.set_log_level('CRITICAL')
 
 
 # ----------------------------------------------------------------------
@@ -26,18 +27,26 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
     filepath = os.path.join(path, mat)
 
     if os.path.exists(filepath) and not overwrite:
-        try:
-            return loadmat(filepath)
-        except ValueError:
-            try:
-                return tables.open_file(filepath, driver="H5FD_CORE")
-            except tables.exceptions.HDF5ExtError:
-                logging.warning('Corrupt database!!\n, overwriting...')
-                return load_mat(path, mat, fid, size, overwrite=True)
 
-        except:
-            logging.warning('Corrupt database!!\n, overwriting...')
-            return load_mat(path, mat, fid, size, overwrite=True)
+        if filepath.endswith('.mat'):
+            try:
+                return loadmat(filepath)
+            except ValueError:
+                try:
+                    return tables.open_file(filepath, driver="H5FD_CORE")
+                except:
+                    pass
+                    # logging.warning('Corrupt database!!\n, overwriting...')
+                    # return load_mat(path, mat, fid, size, overwrite=True)
+
+        elif filepath.endswith('.edf'):
+            try:
+                return mne.io.read_raw_edf(filepath)
+            except:
+                pass
+
+        logging.warning('Corrupt database!!\n, overwriting...')
+        return load_mat(path, mat, fid, size, overwrite=True)
 
     else:
         logging.warning('Database not found!')
@@ -120,6 +129,7 @@ class Database(metaclass=ABCMeta):
         # return mmap
 
     # ----------------------------------------------------------------------
+
     @abstractmethod
     def get_run(self, run: int, classes: Union[int, str], channels=Union[int, str], reject_bad_trials: Optional[bool] = True) -> np.ndarray:
         """"""
@@ -168,9 +178,9 @@ class Database(metaclass=ABCMeta):
             channels = [self.metadata['channel_names'].index(
                 ch) if isinstance(ch, str) else (ch - 1) for ch in channels]
         else:
-            channels = list(range(len(self.metadata['channel_names'])))
+            channels = list(range(1, len(self.metadata['channel_names']) + 1))
 
-        return channels
+        return np.array(channels)
 
     # ----------------------------------------------------------------------
     def format_class_selector(self, classes):
@@ -281,3 +291,34 @@ class BCIilliteracy(Database):
 
         return run[np.concatenate(idx), :, :], np.concatenate(c)
 
+
+########################################################################
+class Physionet(Database):
+    """"""
+
+    # ----------------------------------------------------------------------
+    def load_subject(self, subject: int, mode: str) -> None:
+        """"""
+        if not mode in ['training', 'evaluation']:
+            raise Exception(
+                f"No mode {mode} available, only 'training', 'evaluation'")
+
+        self.runs = self.metadata[f'runs'][subject - 1]
+
+        sessions = []
+        for run in range(1, 15):
+            filename_subject = self.metadata[f'subject_pattern'](
+                subject, run)
+
+            if os.path.split(filename_subject)[-1] not in self.metadata[f'subject_files'].keys():
+                raise Exception(f"Subject {subject} not in list of subjects.")
+
+            fid, size = self.metadata[f'subject_files'][os.path.split(
+                filename_subject)[-1]]
+
+            self.subject = subject
+            self.mode = mode
+
+            sessions.append(load_mat(self.path, filename_subject, fid, size))
+
+        return sessions

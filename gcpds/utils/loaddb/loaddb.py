@@ -1,5 +1,5 @@
 
-from .base import Database, BCIilliteracy, ALL
+from .base import Database, BCIilliteracy, Physionet, ALL
 from typing import Optional, Tuple
 import numpy as np
 from . import databases
@@ -34,8 +34,8 @@ class GIGA(Database):
                          for i in range(0, trials_count, 20)][run])
 
         start = (self.metadata['sampling_rate'] * 2) - 1
-        end = int(self.metadata['sampling_rate']
-                  * self.metadata['duration']) + 1
+        end = int(self.metadata['sampling_rate'] *
+                  self.metadata['duration']) + 1
 
         # reject bad trial
         if reject_bad_trials:
@@ -74,7 +74,7 @@ class GIGA(Database):
         run = np.array(trials)[:, :len(self.metadata['channel_names']), :]
 
         # Select channels
-        run = run[:, channels, :]
+        run = run[:, channels - 1, :]
 
         return run, np.array(classes_out)
 
@@ -83,7 +83,7 @@ class GIGA(Database):
         """"""
         channels = self.format_channels_selectors(channels)
         resting = self.data[1]
-        resting = resting[channels]
+        resting = resting[channels - 1]
         return resting
 
 
@@ -121,7 +121,7 @@ class BCI2a(Database):
         run = run[:, :, :22]
 
         # Select channels
-        run = run[:, :, channels]
+        run = run[:, :, channels - 1]
 
         # trial x channel x time
         run = np.moveaxis(run, 2, 1)
@@ -168,7 +168,7 @@ class HighGamma(Database):
         end = int(self.metadata['sampling_rate'] * self.metadata['duration'])
 
         data = np.concatenate(
-            [getattr(self.data, f"ch{ch+1}") for ch in channels])
+            [getattr(self.data, f"ch{ch}") for ch in channels])
 
         run = np.array([data[:, start:start + end] for start in starts])
 
@@ -227,3 +227,55 @@ class BCIilliteracy_SSVEP(BCIilliteracy):
             self.data_ = [d['EEG_SSVEP_train'][0][0] for d in data_]
         elif mode == 'evaluation':
             self.data_ = [d['EEG_SSVEP_test'][0][0] for d in data_]
+
+
+########################################################################
+class PhysionetMMI(Physionet):
+    """"""
+    metadata = databases.physionet_mmi
+
+    # ----------------------------------------------------------------------
+    def __init__(self, path: Optional[str] = '.') -> None:
+        """Constructor"""
+        self.path = path
+
+        self.classes = {
+            'right fist mi': ([4, 8, 12], 'T1'),
+            'left fist mi': ([4, 8, 12], 'T2'),
+
+            'both fist mi': ([6, 10, 14], 'T1'),
+            'both feet mi': ([6, 10, 14], 'T2'),
+
+            'right fist mm': ([3, 7, 11], 'T1'),
+            'left fist mm': ([3, 7, 11], 'T2'),
+
+            'both fist mm': ([5, 9, 13], 'T1'),
+            'both feet mm': ([5, 9, 13], 'T2'),
+        }
+
+    # ----------------------------------------------------------------------
+    def load_subject(self, subject: int, mode: 'str' = 'training') -> None:
+        """"""
+        self.data_ = super().load_subject(subject, mode)
+
+    # ----------------------------------------------------------------------
+    def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> Tuple[np.ndarray, np.ndarray]:
+        """"""
+        classes = self.format_class_selector(classes)
+        channels = self.format_channels_selectors(channels)
+        super().get_run(run, classes, channels, reject_bad_trials)
+
+        data = []
+        classes_out = []
+
+        for class_ in classes:
+            self.metadata['classes'][class_]
+            runs, desc = self.classes[self.metadata['classes'][class_]]
+            raw_data = self.data_[runs[run] - 1].get_data()
+            eeg = np.array([raw_data[:, int(cl * 160):int((cl + 4) * 160)] for cl in self.data_[runs[run] - 1].annotations.onset[self.data_[runs[run] - 1].annotations.description == desc]])
+            data.append(eeg)
+            classes_out.extend([class_] * eeg.shape[0])
+
+        run = np.concatenate(data)
+
+        return run[:, channels - 1, :], np.array(classes_out)
