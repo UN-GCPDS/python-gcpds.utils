@@ -195,17 +195,34 @@ class Database(metaclass=ABCMeta):
     # ----------------------------------------------------------------------
     def get_epochs(self, run=ALL, **kwargs):
         """"""
-        # Remove channels that not correspond with the montage
-        montage = mne.channels.make_standard_montage(self.metadata['montage'])
-        channels_names = set(self.metadata['channel_names']).intersection(
-            set(montage.ch_names))
-        channels_missings = set(self.metadata['channel_names']).difference(
-            set(montage.ch_names))
+        # # Remove channels that not correspond with the montage
+        # montage = mne.channels.make_standard_montage(self.metadata['montage'])
+        # channels_names = set(self.metadata['channel_names']).intersection(
+            # set(montage.ch_names))
+        # channels_missings = set(self.metadata['channel_names']).difference(
+            # set(montage.ch_names))
 
+        # if channels_missings:
+            # logging.warning(
+                # f"Missing {channels_missings} channels in {self.metadata['montage']} montage.\n"
+                # f"Missing channels will be removed from MNE Epochs")
+
+        montage = mne.channels.make_standard_montage(montage_name)
+
+        # Channels names with the MNE standard capitalization
+        source = self.metadata['channel_names']
+        target = montage.ch_names
+        channels_names = []
+        for ch_s in source:
+            for ch_t in target:
+                if ch_s.lower().strip() == ch_t.lower().strip():
+                    channels_names.append(ch_t)
+
+        # Missing channels
+        channels_missings = set(channels_names).difference(set(montage.ch_names))
         if channels_missings:
-            logging.warning(
-                f"Missing {channels_missings} channels in {self.metadata['montage']} montage.\n"
-                f"Missing channels will be removed from MNE Epochs")
+            print(f"Missing {channels_missings} channels in {montage_name} montage.\n"
+                  f"Missing channels will be removed from MNE Epochs")
 
         info = mne.create_info(
             list(channels_names), sfreq=self.metadata['sampling_rate'], ch_types="eeg")
