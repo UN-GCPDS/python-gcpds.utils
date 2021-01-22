@@ -193,7 +193,7 @@ class Database(metaclass=ABCMeta):
         return classes
 
     # ----------------------------------------------------------------------
-    def get_epochs(self, run=ALL, kwargs_run={}, **kwargs):
+    def get_epochs(self, run=ALL, classes=ALL, kwargs_run={}, **kwargs):
         """"""
         # # Remove channels that not correspond with the montage
         # montage = mne.channels.make_standard_montage(self.metadata['montage'])
@@ -229,14 +229,14 @@ class Database(metaclass=ABCMeta):
         info.set_montage(self.metadata['montage'])
 
         if run != ALL:
-            data, classes = self.get_run(
-                run, channels=list(channels_names), **kwargs_run)
+            data, classes_ = self.get_run(
+                run, classes, channels=list(channels_names), **kwargs_run)
         else:
-            data, classes = self.get_data(
-                run, channels=list(channels_names), **kwargs_run)
+            data, classes_ = self.get_data(
+                classes, channels=list(channels_names), **kwargs_run)
 
-        events = [[i, 1, cls] for i, cls in enumerate(classes)]
-        event_id = {e: i for i, e in enumerate(self.metadata['classes'])}
+        events = [[i, 1, cls] for i, cls in enumerate(classes_)]
+        event_id = {e: i for i, e in enumerate(self.metadata['classes']) if i in classes_}
 
         return mne.EpochsArray(data, info, events=events, tmin=self.metadata['tmin'], event_id=event_id, **kwargs)
 
