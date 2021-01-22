@@ -275,7 +275,7 @@ class PhysionetMMI(Physionet):
 
             if self.data_[runs[run] - 1]:
                 raw_data = self.data_[runs[run] - 1].get_data()
-                eeg = np.array([raw_data[:, int((cl - 4) * 160):int((cl + 4) * 160)] for cl in self.data_[runs[run] - 1].annotations.onset[self.data_[runs[run] - 1].annotations.description == desc]])
+                eeg = np.array([raw_data[:, int((cl - 4) * 160):int((cl - 4) * 160) + (160 * 8)] for cl in self.data_[runs[run] - 1].annotations.onset[self.data_[runs[run] - 1].annotations.description == desc]])
                 data.append(eeg)
                 classes_out.extend([class_] * eeg.shape[0])
 
