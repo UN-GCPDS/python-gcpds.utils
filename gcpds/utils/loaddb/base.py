@@ -313,7 +313,7 @@ class Physionet(Database):
     """"""
 
     # ----------------------------------------------------------------------
-    def load_subject(self, subject: int, mode: str) -> None:
+    def load_subject(self, subject: int, mode: str, classes: list) -> None:
         """"""
         if not mode in ['training', 'evaluation']:
             raise Exception(
@@ -321,8 +321,16 @@ class Physionet(Database):
 
         self.runs = self.metadata[f'runs'][subject - 1]
 
+        if classes != ALL:
+            classes_runs = set(np.concatenate([self.classes[cls][0] for cls in classes]).tolist())
+
         sessions = []
         for run in range(1, 15):
+
+            if classes != ALL and (run not in classes_runs):
+                sessions.append([])
+                continue
+
             filename_subject = self.metadata[f'subject_pattern'](
                 subject, run)
 

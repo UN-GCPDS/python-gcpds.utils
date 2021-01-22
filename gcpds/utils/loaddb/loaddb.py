@@ -34,8 +34,8 @@ class GIGA(Database):
                          for i in range(0, trials_count, 20)][run])
 
         start = (self.metadata['sampling_rate'] * 2) - 1
-        end = int(self.metadata['sampling_rate'] *
-                  self.metadata['duration']) + 1
+        end = int(self.metadata['sampling_rate']
+                  * self.metadata['duration']) + 1
 
         # reject bad trial
         if reject_bad_trials:
@@ -255,9 +255,9 @@ class PhysionetMMI(Physionet):
         }
 
     # ----------------------------------------------------------------------
-    def load_subject(self, subject: int, mode: 'str' = 'training') -> None:
+    def load_subject(self, subject: int, mode: 'str' = 'training', classes: Optional[list] = ALL) -> None:
         """"""
-        self.data_ = super().load_subject(subject, mode)
+        self.data_ = super().load_subject(subject, mode, classes)
 
     # ----------------------------------------------------------------------
     def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> Tuple[np.ndarray, np.ndarray]:
@@ -272,10 +272,12 @@ class PhysionetMMI(Physionet):
         for class_ in classes:
             self.metadata['classes'][class_]
             runs, desc = self.classes[self.metadata['classes'][class_]]
-            raw_data = self.data_[runs[run] - 1].get_data()
-            eeg = np.array([raw_data[:, int((cl - 4) * 160):int((cl + 4) * 160)] for cl in self.data_[runs[run] - 1].annotations.onset[self.data_[runs[run] - 1].annotations.description == desc]])
-            data.append(eeg)
-            classes_out.extend([class_] * eeg.shape[0])
+
+            if self.data_[runs[run] - 1]:
+                raw_data = self.data_[runs[run] - 1].get_data()
+                eeg = np.array([raw_data[:, int((cl - 4) * 160):int((cl + 4) * 160)] for cl in self.data_[runs[run] - 1].annotations.onset[self.data_[runs[run] - 1].annotations.description == desc]])
+                data.append(eeg)
+                classes_out.extend([class_] * eeg.shape[0])
 
         run = np.concatenate(data)
 
