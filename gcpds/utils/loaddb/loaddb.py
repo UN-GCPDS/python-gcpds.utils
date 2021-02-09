@@ -19,23 +19,42 @@ class GIGA(Database):
         self.data = data['eeg'][0][0]
 
     # ----------------------------------------------------------------------
-    def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> Tuple[np.ndarray, np.ndarray]:
+    def get_run(self, run: int, classes: list = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> Tuple[np.ndarray, np.ndarray]:
         """"""
         classes = self.format_class_selector(classes)
         channels = self.format_channels_selectors(channels)
-        super().get_run(run, classes, channels, reject_bad_trials)
+        # super().get_run(run, classes, channels, reject_bad_trials)
 
+        if (0 in classes or 1 in classes) and (2 in classes or 3 in classes):
+            raise Exception(
+                '`get_run()` not support merged classes, use only `mm` or `mi`')
+
+        if classes[0] in [2, 3]:  # mm
+            if run > 0:
+                raise Exception('There is only 1 run for motor movement.')
+            reject_bad_trials = False
+            COUNT = 6
+            CUE = 5
+            TRIAL = 3
+
+        elif classes[0] in [0, 1]:  # mi
+            super().get_run(run, classes, channels, reject_bad_trials)
+            COUNT = 9
+            CUE = 11
+            TRIAL = 7
+
+        BAD = 14
         # Index of starts of all cues
-        all_cues = np.where(self.data[11][0] == 1)[0]
+        all_cues = np.where(self.data[CUE][0] == 1)[0]
 
         # Split in runs and select the specified run
-        trials_count = self.data[9][0][0]
+        trials_count = self.data[COUNT][0][0]
         cues = np.array([all_cues[i:i + 20]
                          for i in range(0, trials_count, 20)][run])
 
         start = (self.metadata['sampling_rate'] * 2) - 1
-        end = int(self.metadata['sampling_rate']
-                  * self.metadata['duration']) + 1
+        end = int(self.metadata['sampling_rate'] *
+                  self.metadata['duration']) + 1
 
         # reject bad trial
         if reject_bad_trials:
@@ -43,7 +62,7 @@ class GIGA(Database):
             for cls in classes:
                 trials_runs = np.ones((trials_count,), dtype=bool)
                 # 14 bad trials--bad trials MI
-                tmp = self.data[14][0][0][1][0][cls]
+                tmp = self.data[BAD][0][0][1][0][cls]
                 if len(tmp) != 0:
                     trials_runs[tmp - 1] = 0
                 bad_trials[cls] = [trials_runs[i:i + 20]
@@ -52,7 +71,14 @@ class GIGA(Database):
         trials = []
         classes_out = []
         for cls in classes:
-            data = self.data[7 + cls]  # classes starts in index 7
+
+            if cls > 1:
+                # classes starts in index 7 for mm
+                data = self.data[TRIAL + cls - 2]
+            else:
+                # classes starts in index 3 for mi
+                data = self.data[TRIAL + cls]
+
             if reject_bad_trials:
                 # cls*max_runs -- run-1
                 # x = bad_trials[(cls * self.runs) + run]
@@ -78,6 +104,28 @@ class GIGA(Database):
         run = run[:, channels - 1, :]
 
         return run, np.array(classes_out)
+
+    # ----------------------------------------------------------------------
+    def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True):
+        """Return all runs."""
+        classes = self.format_class_selector(classes)
+
+        runs_copy = self.runs
+        runs = []
+        classes_out = []
+
+        for cls in classes:
+            if cls in [2, 3]:  # mm
+                self.runs = 1
+                r, c = super().get_data([cls], channels, reject_bad_trials)
+            elif cls in [0, 1]:  # mi
+                self.runs = runs_copy
+                r, c = super().get_data([cls], channels, reject_bad_trials)
+
+            runs.append(r)
+            classes_out.append(c)
+
+        return np.concatenate(runs), np.concatenate(classes_out)
 
     # ----------------------------------------------------------------------
     def resting(self, channels: Optional[list] = ALL) -> np.ndarray:
@@ -275,7 +323,8 @@ class PhysionetMMI(Physionet):
 
             if self.data_[runs[run] - 1]:
                 raw_data = self.data_[runs[run] - 1].get_data()
-                eeg = np.array([raw_data[:, int((cl - 4) * 160):int((cl - 4) * 160) + (160 * 8)] for cl in self.data_[runs[run] - 1].annotations.onset[self.data_[runs[run] - 1].annotations.description == desc]])
+                eeg = np.array([raw_data[:, int((cl - 4) * 160):int((cl - 4) * 160) + (160 * 8)] for cl in self.data_[
+                               runs[run] - 1].annotations.onset[self.data_[runs[run] - 1].annotations.description == desc]])
                 data.append(eeg)
                 classes_out.extend([class_] * eeg.shape[0])
 
