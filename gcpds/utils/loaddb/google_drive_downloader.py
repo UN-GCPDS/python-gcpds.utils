@@ -85,7 +85,7 @@ class GoogleDriveDownloader:
     @staticmethod
     def _get_confirm_token(response):
         for key, value in response.cookies.items():
-            if key == 'NID':
+            if key.startswith('download_warning'):
                 return value
         return None
 
