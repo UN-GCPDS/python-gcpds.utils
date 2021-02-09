@@ -53,8 +53,8 @@ class GIGA(Database):
                          for i in range(0, trials_count, 20)][run])
 
         start = (self.metadata['sampling_rate'] * 2) - 1
-        end = int(self.metadata['sampling_rate'] *
-                  self.metadata['duration']) + 1
+        end = int(self.metadata['sampling_rate']
+                  * self.metadata['duration']) + 1
 
         # reject bad trial
         if reject_bad_trials:
@@ -125,6 +125,7 @@ class GIGA(Database):
             runs.append(r)
             classes_out.append(c)
 
+        self.runs = runs_copy
         return np.concatenate(runs), np.concatenate(classes_out)
 
     # ----------------------------------------------------------------------
