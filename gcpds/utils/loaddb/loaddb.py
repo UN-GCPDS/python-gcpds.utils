@@ -319,7 +319,7 @@ class PhysionetMMI(Physionet):
         classes_out = []
 
         for class_ in classes:
-            self.metadata['classes'][class_]
+            # self.metadata['classes'][class_]
             runs, desc = self.classes[self.metadata['classes'][class_]]
 
             if self.data_[runs[run] - 1]:
