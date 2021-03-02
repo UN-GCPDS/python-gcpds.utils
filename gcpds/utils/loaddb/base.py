@@ -53,7 +53,7 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
             logging.warning('Corrupt database!!\n, overwriting...')
             return load_mat(path, mat, fid, size, overwrite=True, loop=loop + 1)
 
-        if loop > 5:
+        if loop > 2:
             logging.warning(
                 'Several unsuccessful attempts, the data access quota could be compromised.')
             logging.warning(
