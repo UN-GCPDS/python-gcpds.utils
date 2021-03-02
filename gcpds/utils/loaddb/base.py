@@ -8,6 +8,7 @@ from typing import Union, Optional, Tuple
 import numpy as np
 import json
 import mne
+import sys
 import tables
 import logging
 import warnings
@@ -17,7 +18,7 @@ mne.set_log_level('CRITICAL')
 
 
 # ----------------------------------------------------------------------
-def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrite: Optional[bool] = False) -> np.ndarray:
+def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrite: Optional[bool] = False, loop: Optional[int] = 0) -> np.ndarray:
     """Get the raw data for one individual file.
 
     If the file does not exist in the specified path then tries to download it
@@ -45,8 +46,19 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
             except:
                 pass
 
-        logging.warning('Corrupt database!!\n, overwriting...')
-        return load_mat(path, mat, fid, size, overwrite=True)
+        if '/content' in sys.path and '/env/python' in sys.path and os.path.exists('/content/drive/Shareddrives/GCPDS'):
+            logging.warning('Corrupt database!!')
+            return
+        else:
+            logging.warning('Corrupt database!!\n, overwriting...')
+            return load_mat(path, mat, fid, size, overwrite=True, loop=loop + 1)
+
+        if loop > 5:
+            logging.warning(
+                'Several unsuccessful attempts, the data access quota could be compromised.')
+            logging.warning(
+                'Many read and write tasks over Google Drive databases could block the background access system almost 24 hours.')
+            return
 
     else:
         logging.warning('Database not found!')
@@ -58,7 +70,7 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
                                             unzip=False,
                                             overwrite=overwrite,
                                             size=size)
-        return load_mat(path, mat, fid, size)
+        return load_mat(path, mat, fid, size, loop=loop + 1)
 
 
 # ----------------------------------------------------------------------
@@ -175,7 +187,8 @@ class Database(metaclass=ABCMeta):
         """
 
         if channels != ALL:
-            channels = [(list(map(str.lower, self.metadata['channel_names'])).index(ch.lower()) + 1) if isinstance(ch, str) else (ch) for ch in channels]
+            channels = [(list(map(str.lower, self.metadata['channel_names'])).index(
+                ch.lower()) + 1) if isinstance(ch, str) else (ch) for ch in channels]
         else:
             channels = list(range(1, len(self.metadata['channel_names']) + 1))
 
@@ -219,7 +232,8 @@ class Database(metaclass=ABCMeta):
                     channels_names.append(ch_t)
 
         # Missing channels
-        channels_missings = set(channels_names).difference(set(montage.ch_names))
+        channels_missings = set(channels_names).difference(
+            set(montage.ch_names))
         if channels_missings:
             print(f"Missing {channels_missings} channels in {montage_name} montage.\n"
                   f"Missing channels will be removed from MNE Epochs")
@@ -236,7 +250,8 @@ class Database(metaclass=ABCMeta):
                 classes, channels=list(channels_names), **kwargs_run)
 
         events = [[i, 1, cls] for i, cls in enumerate(classes_)]
-        event_id = {e: i for i, e in enumerate(self.metadata['classes']) if i in classes_}
+        event_id = {e: i for i, e in enumerate(
+            self.metadata['classes']) if i in classes_}
 
         return mne.EpochsArray(data, info, events=events, tmin=self.metadata['tmin'], event_id=event_id, **kwargs)
 
@@ -322,7 +337,8 @@ class Physionet(Database):
         self.runs = self.metadata[f'runs'][subject - 1]
 
         if classes != ALL:
-            classes_runs = set(np.concatenate([self.classes[cls][0] for cls in classes]).tolist())
+            classes_runs = set(np.concatenate(
+                [self.classes[cls][0] for cls in classes]).tolist())
 
         sessions = []
         for run in range(1, 15):
