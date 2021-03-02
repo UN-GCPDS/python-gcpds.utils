@@ -46,19 +46,19 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
             except:
                 pass
 
-        if '/content' in sys.path and '/env/python' in sys.path and os.path.exists('/content/drive/Shareddrives/GCPDS'):
-            logging.warning('Corrupt database!!')
-            return
-        else:
-            logging.warning('Corrupt database!!\n, overwriting...')
-            return load_mat(path, mat, fid, size, overwrite=True, loop=loop + 1)
-
         if loop > 2:
             logging.warning(
                 'Several unsuccessful attempts, the data access quota could be compromised.')
             logging.warning(
                 'Many read and write tasks over Google Drive databases could block the background access system almost 24 hours.')
             return
+
+        if '/content' in sys.path and '/env/python' in sys.path and os.path.exists('/content/drive/Shareddrives/GCPDS'):
+            logging.warning('Corrupt database!!')
+            return
+        else:
+            logging.warning('Corrupt database!!\n, overwriting...')
+            return load_mat(path, mat, fid, size, overwrite=True, loop=loop + 1)
 
     else:
         logging.warning('Database not found!')
