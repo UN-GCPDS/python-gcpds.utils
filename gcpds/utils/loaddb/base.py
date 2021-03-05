@@ -66,10 +66,13 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
 
         if os.path.abspath(filepath).startswith('/content/drive/Shareddrives/GCPDS'):
             logging.warning('Write on the shared drive has been disabled.')
-            databaes = [
-                f'databases/{path}' for path in os.listdir("/content/drive/Shareddrives/GCPDS/databases")]
+            databases = [
+                f'databases/{path}' for path in
+                os.listdir("/content/drive/Shareddrives/GCPDS/databases") if
+                os.path.isdir(path)]
+
             logging.warning(
-                f'If you want to use the existing databases must use the respective folder name: {databaes}')
+                f'If you want to use the existing databases must use the respective folder name: {databases}')
             sys.exit()
 
         os.makedirs(path, exist_ok=True)
