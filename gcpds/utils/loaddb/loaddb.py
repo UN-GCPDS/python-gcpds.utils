@@ -1,5 +1,5 @@
 
-from .base import Database, BCIilliteracy, Physionet, ALL
+from .base import Database, GIGA_BCI, PhysioNet, ALL
 from typing import Optional, Tuple
 import numpy as np
 from . import databases
@@ -8,7 +8,7 @@ import logging
 
 
 ########################################################################
-class GIGA(Database):
+class GIGA_MotorImageryExecution(Database):
     """"""
     metadata = databases.giga
 
@@ -53,8 +53,8 @@ class GIGA(Database):
                          for i in range(0, trials_count, 20)][run])
 
         start = (self.metadata['sampling_rate'] * 2) - 1
-        end = int(self.metadata['sampling_rate']
-                  * self.metadata['duration']) + 1
+        end = int(self.metadata['sampling_rate'] *
+                  self.metadata['duration']) + 1
 
         # reject bad trial
         if reject_bad_trials:
@@ -138,7 +138,7 @@ class GIGA(Database):
 
 
 ########################################################################
-class BCI2a(Database):
+class BCI_CIV_2a(Database):
     """"""
     metadata = databases.bci2a
 
@@ -191,7 +191,7 @@ class BCI2a(Database):
 
 
 ########################################################################
-class HighGamma(Database):
+class HighGamma_MI(Database):
     """"""
     metadata = databases.highgamma
 
@@ -232,7 +232,7 @@ class HighGamma(Database):
 
 
 ########################################################################
-class BCIilliteracy_MI(BCIilliteracy):
+class GIGA_BCI_MI(GIGA_BCI):
     """"""
     metadata = databases.bciilliteracy_mi
 
@@ -248,7 +248,7 @@ class BCIilliteracy_MI(BCIilliteracy):
 
 
 ########################################################################
-class BCIilliteracy_ERP(BCIilliteracy):
+class GIGA_BCI_ERP(GIGA_BCI):
     """"""
     metadata = databases.bciilliteracy_erp
 
@@ -264,7 +264,7 @@ class BCIilliteracy_ERP(BCIilliteracy):
 
 
 ########################################################################
-class BCIilliteracy_SSVEP(BCIilliteracy):
+class GIGA_BCI_SSVEP(GIGA_BCI):
     """"""
     metadata = databases.bciilliteracy_ssvep
 
@@ -280,7 +280,7 @@ class BCIilliteracy_SSVEP(BCIilliteracy):
 
 
 ########################################################################
-class PhysionetMMI(Physionet):
+class PhysioNet_MotorImageryExecution(PhysioNet):
     """"""
     metadata = databases.physionet_mmi
 
@@ -332,3 +332,36 @@ class PhysionetMMI(Physionet):
         run = np.concatenate(data)
 
         return run[:, channels - 1, :], np.array(classes_out)
+
+
+########################################################################
+class GIGA(GIGA_MotorImageryExecution):
+    def __init__(self, *args, **kwargs):
+        logging.warning(
+            "'GIGA()' class will be removed, use 'GIGA_MotorImageryExecution()' instead")
+        super().__init__(*args, **kwargs)
+
+
+########################################################################
+class BCI2a(BCI_CIV_2a):
+    def __init__(self, *args, **kwargs):
+        logging.warning(
+            "'BCI2a()' class will be removed, use 'BCI_CIV_2a()' instead")
+        super().__init__(*args, **kwargs)
+
+
+########################################################################
+class Physionet_MMI(PhysioNet_MotorImageryExecution):
+    def __init__(self, *args, **kwargs):
+        logging.warning(
+            "'Physionet_MMI()' class will be removed, use 'PhysioNet_MotorImageryExecution()' instead")
+        super().__init__(*args, **kwargs)
+
+
+########################################################################
+class HighGamma(HighGamma_MI):
+    def __init__(self, *args, **kwargs):
+        logging.warning(
+            "'HighGamma()' class will be removed, use 'HighGamma_MI()' instead")
+        super().__init__(*args, **kwargs)
+

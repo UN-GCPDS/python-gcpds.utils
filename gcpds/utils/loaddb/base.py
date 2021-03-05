@@ -64,9 +64,10 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
         logging.warning('Database not found!')
         logging.warning('downloading...')
 
-        if overwrite and os.path.abspath(filepath).startswith('/content/drive/Shareddrives/GCPDS'):
+        if os.path.abspath(filepath).startswith('/content/drive/Shareddrives/GCPDS'):
             logging.warning('Write on the shared drive has been disabled.')
-            databaes = os.listdir("/content/drive/Shareddrives/GCPDS/databases")
+            databaes = [
+                f'databases/{path}' for path in os.listdir("/content/drive/Shareddrives/GCPDS/databases")]
             logging.warning(
                 f'If you want to use the existing databases must use the respective folder name: {databaes}')
             sys.exit()
@@ -270,7 +271,7 @@ class Database(metaclass=ABCMeta):
 
 
 ########################################################################
-class BCIilliteracy(Database):
+class GIGA_BCI(Database):
     """"""
 
     # ----------------------------------------------------------------------
@@ -331,7 +332,7 @@ class BCIilliteracy(Database):
 
 
 ########################################################################
-class Physionet(Database):
+class PhysioNet(Database):
     """"""
 
     # ----------------------------------------------------------------------
