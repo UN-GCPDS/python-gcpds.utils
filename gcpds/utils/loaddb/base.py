@@ -51,7 +51,7 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
                 'Several unsuccessful attempts, the data access quota could be compromised.')
             logging.warning(
                 'Many read and write tasks over Google Drive databases could block the background access system almost 24 hours.')
-            return
+            sys.exit()
 
         if '/content' in sys.path and '/env/python' in sys.path and os.path.exists('/content/drive/Shareddrives/GCPDS'):
             logging.warning('Corrupt database!!')
@@ -63,6 +63,13 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
     else:
         logging.warning('Database not found!')
         logging.warning('downloading...')
+
+        if overwrite and os.path.abspath(filepath).startswith('/content/drive/Shareddrives/GCPDS'):
+            logging.warning('Write on the shared drive has been disabled.')
+            databaes = os.listdir("/content/drive/Shareddrives/GCPDS/databases")
+            logging.warning(
+                f'If you want to use the existing databases must use the respective folder name: {databaes}')
+            sys.exit()
 
         os.makedirs(path, exist_ok=True)
         gdd.download_file_from_google_drive(file_id=fid,
