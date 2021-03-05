@@ -351,10 +351,10 @@ class BCI2a(BCI_CIV_2a):
 
 
 ########################################################################
-class Physionet_MMI(PhysioNet_MotorImageryExecution):
+class PhysionetMMI(PhysioNet_MotorImageryExecution):
     def __init__(self, *args, **kwargs):
         logging.warning(
-            "'Physionet_MMI()' class will be removed, use 'PhysioNet_MotorImageryExecution()' instead")
+            "'PhysionetMMI()' class will be removed, use 'PhysioNet_MotorImageryExecution()' instead")
         super().__init__(*args, **kwargs)
 
 
