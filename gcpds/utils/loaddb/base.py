@@ -69,7 +69,7 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
             databases = [
                 f'databases/{path}' for path in
                 os.listdir("/content/drive/Shareddrives/GCPDS/databases") if
-                os.path.isdir(path)]
+                os.path.isdir(os.path.join("/content/drive/Shareddrives/GCPDS/databases", path))]
 
             logging.warning(
                 f'If you want to use the existing databases must use the respective folder name: {databases}')
