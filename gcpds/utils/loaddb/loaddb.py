@@ -8,7 +8,7 @@ import logging
 
 
 ########################################################################
-class GIGA_MotorImageryExecution(Database):
+class GIGA_MI_ME(Database):
     """"""
     metadata = databases.giga
 
@@ -280,7 +280,7 @@ class GIGA_BCI_SSVEP(GIGA_BCI):
 
 
 ########################################################################
-class PhysioNet_MotorImageryExecution(PhysioNet):
+class PhysioNet_MI_ME(PhysioNet):
     """"""
     metadata = databases.physionet_mmi
 
@@ -335,10 +335,10 @@ class PhysioNet_MotorImageryExecution(PhysioNet):
 
 
 ########################################################################
-class GIGA(GIGA_MotorImageryExecution):
+class GIGA(GIGA_MI_ME):
     def __init__(self, *args, **kwargs):
         logging.warning(
-            "'GIGA()' class will be removed, use 'GIGA_MotorImageryExecution()' instead")
+            "'GIGA()' class will be removed, use 'GIGA_BCI()' instead")
         super().__init__(*args, **kwargs)
 
 
@@ -351,10 +351,10 @@ class BCI2a(BCI_CIV_2a):
 
 
 ########################################################################
-class PhysionetMMI(PhysioNet_MotorImageryExecution):
+class PhysionetMMI(PhysioNet_MI_ME):
     def __init__(self, *args, **kwargs):
         logging.warning(
-            "'PhysionetMMI()' class will be removed, use 'PhysioNet_MotorImageryExecution()' instead")
+            "'PhysionetMMI()' class will be removed, use 'PhysioNet_MI_ME()' instead")
         super().__init__(*args, **kwargs)
 
 
