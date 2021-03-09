@@ -33,17 +33,19 @@ documentation template preconfigured and 'CGPDS' as the namespace.""", end="\n\n
 
             print("Documentation: https://gcpds.readthedocs.io/projects/utils/en/latest/_notebooks/05-distutils.html", end="\n\n")
 
-        def read(hint, default=None):
+        def read(hint, default=None, empty=False):
             if default:
                 v = input(f"{Fore.MAGENTA}> {hint} [{default}]: {Fore.RESET}")
             else:
                 v = input(f"{Fore.MAGENTA}> {hint}: {Fore.RESET}")
 
-            if not v and not default:
+            if not v and not default and not empty:
                 print(f"{Fore.RED}* Please enter some text.{Fore.RESET}")
                 return read(hint)
             elif not v and default:
                 return default
+            elif not v and empty:
+                return ''
             else:
                 return v
 
@@ -58,7 +60,7 @@ documentation template preconfigured and 'CGPDS' as the namespace.""", end="\n\n
             f'Maintainer email', default=kwargs.get('MAINTAINER_EMAIL', author_email))
 
         requieres = read(f'Requieres (separated by comma)',
-                         default=kwargs.get('PKG_REQUIERES', None))
+                         default=kwargs.get('PKG_REQUIERES', None), empty=True)
 
         self.data = {
             'PKG_NAME': pkg_name.lower().replace(' ', '_').replace('-', '_'),
@@ -89,7 +91,8 @@ documentation template preconfigured and 'CGPDS' as the namespace.""", end="\n\n
     def clone_pkg(self):
         """"""
 
-        self.pkg_user = os.path.join(self.dst, self.data['PKG_NAME'])
+        self.pkg_user = os.path.join(
+            self.dst, f"python-gcpds.{self.data['PKG_NAME']}")
 
         try:
             shutil.copytree(self.src, self.pkg_user)
