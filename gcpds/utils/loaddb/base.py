@@ -230,7 +230,7 @@ class Database(metaclass=ABCMeta):
         return classes
 
     # ----------------------------------------------------------------------
-    def get_epochs(self, run=ALL, classes=ALL, kwargs_run={}, **kwargs):
+    def get_epochs(self, run=ALL, classes=ALL, channels=ALL, kwargs_run={}, **kwargs):
         """"""
         # # Remove channels that not correspond with the montage
         # montage = mne.channels.make_standard_montage(self.metadata['montage'])
@@ -247,7 +247,12 @@ class Database(metaclass=ABCMeta):
         montage = mne.channels.make_standard_montage(self.metadata['montage'])
 
         # Channels names with the MNE standard capitalization
-        source = self.metadata['channel_names']
+
+        if channels == ALL:
+            source = self.metadata['channel_names']
+        else:
+            source = channels
+
         target = montage.ch_names
         channels_names = []
         for ch_s in source:
