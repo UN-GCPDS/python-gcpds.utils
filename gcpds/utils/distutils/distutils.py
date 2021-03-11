@@ -105,6 +105,12 @@ documentation template preconfigured and 'CGPDS' as the namespace.""", end="\n\n
         os.rename(os.path.join(self.pkg_user, 'gcpds', '{{PKG_NAME}}'),
                   os.path.join(self.pkg_user, 'gcpds', self.data['PKG_NAME']))
 
+        os.rename(os.path.join(self.pkg_user, 'dot.gitignore'),
+                  os.path.join(self.pkg_user, '.gitignore'))
+
+        os.rename(os.path.join(self.pkg_user, 'dot.readthedocs.yml'),
+                  os.path.join(self.pkg_user, '.readthedocs.yml'))
+
     # ----------------------------------------------------------------------
     def contextualize(self):
         """"""

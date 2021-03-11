@@ -24,6 +24,7 @@ giga = {
     'subject_evaluation_pattern': lambda subject: f's{str(subject).rjust(2, "0")}.mat',
 
     'metadata': fids['GIGA metadata'],
+    'directory': 'databases/GIGA-MI_ME',
 }
 
 
@@ -46,7 +47,7 @@ bci2a = {
     'subject_evaluation_pattern': lambda subject: f'A{str(subject).rjust(2, "0")}E.mat',
 
     'metadata': fids['BCI2a metadata'],
-
+    'directory': 'databases/BCI_Competition_IV/dataset_2a',
 }
 
 
@@ -69,6 +70,7 @@ highgamma = {
     'subject_evaluation_pattern': lambda subject: os.path.join('test', f'{subject}.mat'),
 
     'metadata': fids['HighGamma metadata'],
+    'directory': 'databases/HighGamma-MI',
 }
 
 
@@ -88,6 +90,7 @@ bciilliteracy_mi = {
     'subject_pattern': lambda subject, run: os.path.join(f'session{run}', f'sess{str(run).rjust(2, "0")}_subj{str(subject).rjust(2, "0")}_EEG_MI.mat'),
 
     'metadata': fids['BCIilliteracy metadata'],
+    'directory': 'databases/GIGA-BCI',
 
 }
 
@@ -129,5 +132,6 @@ physionet_mmi = {
     'subject_pattern': lambda subject, run: os.path.join(f'S{str(subject).rjust(3, "0")}', f'S{str(subject).rjust(3, "0")}R{str(run).rjust(2, "0")}.edf'),
 
     'metadata': fids['PhysionetMMI metadata'],
+    'directory': 'databases/PhysioNet-MI_ME',
 
 }
