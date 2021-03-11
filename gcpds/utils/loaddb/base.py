@@ -6,6 +6,7 @@ import os
 from abc import ABCMeta, abstractmethod
 from typing import Union, Optional, Tuple
 import numpy as np
+# from .databases import databases
 import json
 import mne
 import sys
@@ -15,6 +16,12 @@ import warnings
 
 ALL = 'all'
 mne.set_log_level('CRITICAL')
+
+
+# ----------------------------------------------------------------------
+def drive_mounted():
+    """"""
+    return '/content' in sys.path and '/env/python' in sys.path and os.path.exists('/content/drive/Shareddrives/GCPDS')
 
 
 # ----------------------------------------------------------------------
@@ -53,7 +60,7 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
                 'Many read and write tasks over Google Drive databases could block the background access system almost 24 hours.')
             sys.exit()
 
-        if '/content' in sys.path and '/env/python' in sys.path and os.path.exists('/content/drive/Shareddrives/GCPDS'):
+        if drive_mounted():
             logging.warning('Corrupt database!!')
             return
         else:
@@ -64,15 +71,10 @@ def load_mat(path: str, mat: str, fid: str, size: Optional[int] = None, overwrit
         logging.warning('Database not found!')
         logging.warning('downloading...')
 
-        if os.path.abspath(filepath).startswith('/content/drive/Shareddrives/GCPDS'):
+        if drive_mounted():
             logging.warning('Write on the shared drive has been disabled.')
-            databases = [
-                f'databases/{path}' for path in
-                os.listdir("/content/drive/Shareddrives/GCPDS/databases") if
-                os.path.isdir(os.path.join("/content/drive/Shareddrives/GCPDS/databases", path))]
-
             logging.warning(
-                f'If you want to use the existing databases must use the respective folder name: {databases}')
+                f'The directory name is optional for Google Drive mounted environment')
             sys.exit()
 
         os.makedirs(path, exist_ok=True)
@@ -110,8 +112,16 @@ class Database(metaclass=ABCMeta):
     """"""
 
     # ----------------------------------------------------------------------
-    def __init__(self, path: Optional[str] = '.') -> None:
+    def __init__(self, path: Optional[str] = None) -> None:
         """Constructor"""
+
+        if path and drive_mounted():
+            logging.warning(
+                'The directory folder is optional for Google Drive mounted environment.')
+
+        if not path and drive_mounted():
+            logging.info('Using the Google Drive environment')
+
         self.path = path
         # self.usemenmap = usemenmap
 
@@ -124,6 +134,9 @@ class Database(metaclass=ABCMeta):
                 f"No mode {mode} available, only 'training', 'evaluation'")
 
         filename_subject = self.metadata[f'subject_{mode}_pattern'](subject)
+
+        if self.path is None:
+            self.path = self.metadata['directory']
 
         if os.path.split(filename_subject)[-1] not in self.metadata[f'subject_{mode}_files'].keys():
             raise Exception(f"Subject {subject} not in list of subjects.")
@@ -286,6 +299,9 @@ class GIGA_BCI(Database):
 
         self.runs = self.metadata[f'runs'][subject - 1]
 
+        if self.path is None:
+            self.path = self.metadata['directory']
+
         sessions = []
         for run in range(self.runs):
             filename_subject = self.metadata[f'subject_pattern'](
@@ -346,6 +362,9 @@ class PhysioNet(Database):
                 f"No mode {mode} available, only 'training', 'evaluation'")
 
         self.runs = self.metadata[f'runs'][subject - 1]
+
+        if self.path is None:
+            self.path = self.metadata['directory']
 
         if classes != ALL:
             classes_runs = set(np.concatenate(
