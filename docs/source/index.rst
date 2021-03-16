@@ -2,7 +2,7 @@
 .. include:: notebooks/readme.rst
 
 Navigation
-^^^^^^^^^^
+----------
 
 .. toctree::
    :maxdepth: 2
@@ -10,7 +10,6 @@ Navigation
 
    notebooks/01-database_handler
    notebooks/02-databases
-   notebooks/03-filters
    notebooks/04-mne_integrations
    notebooks/05-processing
    notebooks/06-distutils
@@ -18,7 +17,7 @@ Navigation
 
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
