@@ -191,7 +191,7 @@ class BCI_CIV_2a(Database):
 
 
 ########################################################################
-class HighGamma_MI(Database):
+class HighGamma_ME(Database):
     """"""
     metadata = databases.highgamma
 
@@ -359,9 +359,17 @@ class PhysionetMMI(PhysioNet_MI_ME):
 
 
 ########################################################################
-class HighGamma(HighGamma_MI):
+class HighGamma(HighGamma_ME):
     def __init__(self, *args, **kwargs):
         logging.warning(
             "'HighGamma()' class will be removed, use 'HighGamma_MI()' instead")
+        super().__init__(*args, **kwargs)
+
+
+########################################################################
+class HighGamma_MI(HighGamma_ME):
+    def __init__(self, *args, **kwargs):
+        logging.warning(
+            "'HighGamma_MI()' class will be removed, use 'HighGamma_ME()' instead")
         super().__init__(*args, **kwargs)
 
