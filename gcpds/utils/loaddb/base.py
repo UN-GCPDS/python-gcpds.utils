@@ -180,26 +180,23 @@ class Database(metaclass=ABCMeta):
                 f"The class index {np.max(classes)} is out of range.")
 
     # ----------------------------------------------------------------------
-    def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True):
+    def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True, keep_runs_separated: bool = False):
         """Return all runs."""
 
-        start = 0
-        for _ in range(self.runs):
-            r, c = self.get_run(start, classes=classes, channels=channels,
-                                reject_bad_trials=reject_bad_trials)
-            if not r is None:
-                break
-            else:
-                start += 1
+        if keep_runs_separated:
+            return [self.get_run(run, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials) for run in range(self.runs)]
 
-        for run in range(start + 1, self.runs):
-            r_, c_ = self.get_run(
-                run, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials)
-            if not r_ is None:
-                r = np.concatenate([r, r_], axis=0)
-                c = np.concatenate([c, c_])
+        else:
+            r, c = self.get_run(
+                0, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials)
+            for run in range(1, self.runs):
+                r_, c_ = self.get_run(
+                    run, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials)
+                if not r_ is None:
+                    r = np.concatenate([r, r_], axis=0)
+                    c = np.concatenate([c, c_])
 
-        return r, c
+            return r, c
 
     # ----------------------------------------------------------------------
     def format_channels_selectors(self, channels=None):
@@ -228,6 +225,25 @@ class Database(metaclass=ABCMeta):
             classes = range(len(self.metadata['classes']))
 
         return classes
+
+    # ----------------------------------------------------------------------
+    def format_non_class_selector(self, classes):
+        """"""
+        if classes != ALL:
+            classes = [self.metadata['non_task_classes'].index(
+                cls) if isinstance(cls, str) else cls for cls in classes]
+        else:
+            classes = range(len(self.metadata['non_task_classes']))
+
+        return classes
+
+    # ----------------------------------------------------------------------
+    def format_runs(self, runs):
+        """"""
+        if runs != ALL:
+            return self.metadata[runs][self.subject]
+        else:
+            return range(self.runs)
 
     # ----------------------------------------------------------------------
     def get_epochs(self, run=ALL, classes=ALL, channels=ALL, kwargs_run={}, **kwargs):
@@ -323,7 +339,17 @@ class GIGA_BCI(Database):
 
             sessions.append(load_mat(self.path, filename_subject, fid, size))
 
-        return sessions
+        artifacts = []
+        for run in range(self.runs):
+            filename_artifact = self.metadata[f'artifact_pattern'](
+                subject, run + 1)
+
+            fid, size = self.metadata[f'subject_files'][os.path.split(
+                filename_artifact)[-1]]
+
+            artifacts.append(load_mat(self.path, filename_artifact, fid, size))
+
+        return sessions, artifacts
 
     # ----------------------------------------------------------------------
     def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> Tuple[np.ndarray, np.ndarray]:
@@ -353,6 +379,27 @@ class GIGA_BCI(Database):
             c.append([cls] * len(idx[-1]))
 
         return run[np.concatenate(idx), :, :], np.concatenate(c)
+
+    # ----------------------------------------------------------------------
+    def non_task(self, non_task_classes: Optional[list] = ALL, runs: Optional[list] = ALL, channels: Optional[list] = ALL) -> np.ndarray:
+        """"""
+        channels = self.format_channels_selectors(channels)
+        non_task_classes = self.format_non_class_selector(non_task_classes)
+        runs = self.format_runs(runs)
+
+        rst = []
+        for session in runs:
+            # 13: pre_rest
+            # 14: post_rest
+            rst_rn = []
+            nt = [self.data_[session][13].T, self.data_[session][14].T,
+                  *np.moveaxis(self.artifacts_[session], 0, 1)]
+
+            for index in non_task_classes:
+                rst_rn.append(nt[index][channels - 1])
+            rst.append(rst_rn)
+
+        return rst
 
 
 ########################################################################

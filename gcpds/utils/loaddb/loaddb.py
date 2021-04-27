@@ -7,6 +7,17 @@ import warnings
 import logging
 
 
+# ----------------------------------------------------------------------
+def deprecated(replace):
+    def wrap(fn):
+        def wrap2(cls, *args, **kwargs):
+            logging.warning(
+                f"The '{fn}' have been deprecated, please use '{replace}'")
+            return fn(cls, *args, **kwargs)
+        return wrap2
+    return wrap
+
+
 ########################################################################
 class GIGA_MI_ME(Database):
     """"""
@@ -106,7 +117,7 @@ class GIGA_MI_ME(Database):
         return run, np.array(classes_out)
 
     # ----------------------------------------------------------------------
-    def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True):
+    def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> list:
         """Return all runs."""
         classes = self.format_class_selector(classes)
 
@@ -129,12 +140,24 @@ class GIGA_MI_ME(Database):
         return np.concatenate(runs), np.concatenate(classes_out)
 
     # ----------------------------------------------------------------------
+    @deprecated('non_task')
     def resting(self, channels: Optional[list] = ALL) -> np.ndarray:
         """"""
         channels = self.format_channels_selectors(channels)
         resting = self.data[1]
-        resting = resting[channels - 1]
+        resting = np.array([resting[channels - 1]])
         return resting
+
+    # ----------------------------------------------------------------------
+    def non_task(self, non_task_classes: Optional[list] = ALL, runs: Optional = None, channels: Optional[list] = ALL) -> np.ndarray:
+        """"""
+        channels = self.format_channels_selectors(channels)
+        non_task_classes = self.format_non_class_selector(non_task_classes)
+        all_non_task = (self.data[1], *[_[0] for _ in self.data[0]])
+        non_task = []
+        for index in non_task_classes:
+            non_task.append(all_non_task[index][channels - 1])
+        return [non_task]
 
 
 ########################################################################
@@ -168,7 +191,7 @@ class BCI_CIV_2a(Database):
                         for start in starts])
 
         # Remove EOG
-        run = run[:, :, :22]
+        run = run[:, :, : 22]
 
         # Select channels
         run = run[:, :, channels - 1]
@@ -239,12 +262,14 @@ class GIGA_BCI_MI(GIGA_BCI):
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
-        data_ = super().load_subject(subject, mode)
+        data_, artifacts_ = super().load_subject(subject, mode)
 
         if mode == 'training':
             self.data_ = [d['EEG_MI_train'][0][0] for d in data_]
         elif mode == 'evaluation':
             self.data_ = [d['EEG_MI_test'][0][0] for d in data_]
+
+        self.artifacts_ = [a['EEG_Artifact'][0][0][0] for a in artifacts_]
 
 
 ########################################################################
@@ -255,12 +280,14 @@ class GIGA_BCI_ERP(GIGA_BCI):
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
-        data_ = super().load_subject(subject, mode)
+        data_, artifacts_ = super().load_subject(subject, mode)
 
         if mode == 'training':
             self.data_ = [d['EEG_ERP_train'][0][0] for d in data_]
         elif mode == 'evaluation':
             self.data_ = [d['EEG_ERP_test'][0][0] for d in data_]
+
+        self.artifacts_ = [a['EEG_Artifact'][0][0][0] for a in artifacts_]
 
 
 ########################################################################
@@ -271,12 +298,14 @@ class GIGA_BCI_SSVEP(GIGA_BCI):
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
-        data_ = super().load_subject(subject, mode)
+        data_, artifacts_ = super().load_subject(subject, mode)
 
         if mode == 'training':
             self.data_ = [d['EEG_SSVEP_train'][0][0] for d in data_]
         elif mode == 'evaluation':
             self.data_ = [d['EEG_SSVEP_test'][0][0] for d in data_]
+
+        self.artifacts_ = [a['EEG_Artifact'][0][0][0] for a in artifacts_]
 
 
 ########################################################################
