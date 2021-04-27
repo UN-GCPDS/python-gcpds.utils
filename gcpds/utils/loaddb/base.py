@@ -207,9 +207,27 @@ class Database(metaclass=ABCMeta):
             return [self.get_run(run, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials) for run in range(self.runs)]
 
         else:
-            r, c = self.get_run(
-                0, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials)
-            for run in range(1, self.runs):
+            # r, c = self.get_run(
+                # 0, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials)
+            # for run in range(1, self.runs):
+                # r_, c_ = self.get_run(
+                    # run, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials)
+                # if not r_ is None:
+                    # r = np.concatenate([r, r_], axis=0)
+                    # c = np.concatenate([c, c_])
+
+            # return r, c
+
+            start = 0
+            for _ in range(self.runs):
+                r, c = self.get_run(start, classes=classes, channels=channels,
+                                    reject_bad_trials=reject_bad_trials)
+                if not r is None:
+                    break
+                else:
+                    start += 1
+
+            for run in range(start + 1, self.runs):
                 r_, c_ = self.get_run(
                     run, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials)
                 if not r_ is None:
