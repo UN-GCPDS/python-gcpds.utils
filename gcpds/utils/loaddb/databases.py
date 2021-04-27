@@ -12,7 +12,7 @@ giga = {
     'sampling_rate': 512,
     'montage': 'standard_1005',
     'tmin': -2,
-    'duration': 5,
+    'duration': 7,
     'reference': '',
     'subjects': 52,
     'runs_training': [5, 5, 5, 5, 5, 5, 6, 5, 6, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 5, 5, 5, 5],
