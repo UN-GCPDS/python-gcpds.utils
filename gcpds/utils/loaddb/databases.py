@@ -16,7 +16,6 @@ giga = {
     'reference': '',
     'subjects': 52,
     'runs_training': [5, 5, 5, 5, 5, 5, 6, 5, 6, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 5, 5, 5, 5],
-    'runs_evaluation': [],
 
     'subject_training_files': fids['GIGA training'],
     'subject_training_pattern': lambda subject: f's{str(subject).rjust(2, "0")}.mat',
@@ -85,6 +84,7 @@ bciilliteracy_mi = {
     'duration': 7,
     'reference': '',
     'subjects': 54,
+    'runs_training': [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
     'runs': [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 
     # 'subject_files': list(filter(lambda f: 'MI' in f, fids['BCIilliteracy'])),
