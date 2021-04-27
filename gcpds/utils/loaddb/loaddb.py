@@ -65,7 +65,7 @@ class GIGA_MI_ME(Database):
 
         start = (self.metadata['sampling_rate'] * 2) - 1
         end = int(self.metadata['sampling_rate']
-                  * (self.metadata['duration']+self.metadata['tmin'])) + 1
+                  * self.metadata['duration']+self.metadata['tmin']) + 1
 
         # reject bad trial
         if reject_bad_trials:

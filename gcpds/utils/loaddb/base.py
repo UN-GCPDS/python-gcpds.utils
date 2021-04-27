@@ -139,7 +139,9 @@ class Database(metaclass=ABCMeta):
         lines.append(f"Trials duration: {self.metadata['duration']}")
         lines.append(f"Trials tmin: {self.metadata['tmin']}")
         lines.append(f"Classes: {self.metadata['classes']}")
-        lines.append(f"Non-task classes: {self.metadata['non_task_classes']}")
+        if 'non_task_classes' in self.metadata:
+            lines.append(
+                f"Non-task classes: {self.metadata['non_task_classes']}")
         lines.append('#' * 50)
         return '\n'.join(lines)
 
@@ -323,6 +325,11 @@ class Database(metaclass=ABCMeta):
         """"""
         download_metadata(os.path.join(self.path, 'metadata'),
                           self.metadata['metadata'])
+
+    # ----------------------------------------------------------------------
+    def non_task(self, *args, **kwargs):
+        """"""
+        logging.warning("This database has not non-task data")
 
 
 ########################################################################
