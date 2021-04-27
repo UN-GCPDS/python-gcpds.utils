@@ -64,8 +64,8 @@ class GIGA_MI_ME(Database):
                          for i in range(0, trials_count, 20)][run])
 
         start = (self.metadata['sampling_rate'] * 2) - 1
-        end = int(self.metadata['sampling_rate'] *
-                  self.metadata['duration']) + 1
+        end = int(self.metadata['sampling_rate']
+                  * self.metadata['duration']) + 1
 
         # reject bad trial
         if reject_bad_trials:
@@ -117,7 +117,7 @@ class GIGA_MI_ME(Database):
         return run, np.array(classes_out)
 
     # ----------------------------------------------------------------------
-    def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> list:
+    def get_data(self, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True, keep_runs_separated: bool = False) -> list:
         """Return all runs."""
         classes = self.format_class_selector(classes)
 
@@ -137,7 +137,12 @@ class GIGA_MI_ME(Database):
             classes_out.append(c)
 
         self.runs = runs_copy
-        return np.concatenate(runs), np.concatenate(classes_out)
+
+        if keep_runs_separated:
+            return list(zip(runs, classes_out))
+
+        else:
+            return np.concatenate(runs), np.concatenate(classes_out)
 
     # ----------------------------------------------------------------------
     @deprecated('non_task')
