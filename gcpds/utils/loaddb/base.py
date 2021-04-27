@@ -126,6 +126,24 @@ class Database(metaclass=ABCMeta):
         # self.usemenmap = usemenmap
 
     # ----------------------------------------------------------------------
+    def __repr__(self):
+        """"""
+        lines = []
+        lines.append('#' * 50)
+        lines.append(f'{self.__class__.__name__}')
+        lines.append('#' * 50)
+        lines.append(f"Channels: {self.metadata['channel_names']}")
+        lines.append(f"Sampling rate: {self.metadata['sampling_rate']} Hz")
+        lines.append(f"Montage: {self.metadata['montage']}")
+        lines.append(f"Subjects: {self.metadata['subjects']}")
+        lines.append(f"Trials duration: {self.metadata['duration']}")
+        lines.append(f"Trials tmin: {self.metadata['tmin']}")
+        lines.append(f"Classes: {self.metadata['classes']}")
+        lines.append(f"Non-task classes: {self.metadata['non_task_classes']}")
+        lines.append('#' * 50)
+        return '\n'.join(lines)
+
+    # ----------------------------------------------------------------------
     @abstractmethod
     def load_subject(self, subject: int, mode: str) -> None:
         """"""
