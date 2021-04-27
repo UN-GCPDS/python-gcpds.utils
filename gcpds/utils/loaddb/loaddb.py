@@ -319,7 +319,7 @@ class PhysioNet_MI_ME(PhysioNet):
     metadata = databases.physionet_mmi
 
     # ----------------------------------------------------------------------
-    def __init__(self, path: Optional[str] = '.') -> None:
+    def __init__(self, path: Optional[str] = None) -> None:
         """Constructor"""
         self.path = path
 
