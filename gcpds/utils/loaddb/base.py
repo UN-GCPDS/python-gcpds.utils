@@ -185,7 +185,6 @@ class Database(metaclass=ABCMeta):
         # return mmap
 
     # ----------------------------------------------------------------------
-
     @abstractmethod
     def get_run(self, run: int, classes: Union[int, str], channels=Union[int, str], reject_bad_trials: Optional[bool] = True) -> np.ndarray:
         """"""

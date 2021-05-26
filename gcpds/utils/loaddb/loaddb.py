@@ -366,6 +366,52 @@ class PhysioNet_MI_ME(PhysioNet):
         run = np.concatenate(data)
 
         return run[:, channels - 1, :], np.array(classes_out)
+    
+    
+
+########################################################################
+class AuditoryProcessing(Database):
+    """"""
+    metadata = databases.auditory_processing
+
+    # ----------------------------------------------------------------------
+    def load_subject(self, subject: int, mode: 'str' = 'training', classes: Optional[list] = ALL) -> None:
+        """"""
+        self.data = super().load_subject(subject, mode)
+
+    # ----------------------------------------------------------------------
+    def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> Tuple[np.ndarray, np.ndarray]:
+        """"""
+        classes = self.format_class_selector(classes)
+        channels = self.format_channels_selectors(channels)
+        super().get_run(run, classes, channels, reject_bad_trials)
+        
+        data = []
+        classes_tempo = []
+        classes_out = []
+
+        for class_ in classes:
+            ## self.metadata['classes'][class_]
+            data.append(self.data[self.metadata['classes'][class_]][0][0][0])
+            classes_tempo.extend(self.data[self.metadata['classes'][class_]][0][0][1][0])
+            classes_out.extend([class_]*self.data[self.metadata['classes'][class_]][0][0][1][0].size)
+            
+        run = np.concatenate(data)
+        run = np.moveaxis(run, 2, 1)
+        run = np.moveaxis(run, 0, 2)
+
+        return run[:, channels - 1, :], np.array([classes_out, classes_tempo]).T
+
+
+    # ----------------------------------------------------------------------
+    def non_task(self, non_task_classes: Optional[list] = ALL, runs: Optional[list] = ALL, channels: Optional[list] = ALL) -> np.ndarray:
+        """"""
+        channels = self.format_channels_selectors(channels)
+        non_task_classes = self.format_non_class_selector(non_task_classes)
+        #runs = self.format_runs(runs)
+
+        return np.array([self.data['base'].T])
+
 
 
 ########################################################################

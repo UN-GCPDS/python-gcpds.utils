@@ -138,3 +138,22 @@ physionet_mmi = {
     'directory': 'databases/PhysioNet-MI_ME',
 
 }
+
+auditory_processing = {
+    'channel_names': ['Fp1', 'Fp2', 'F7', 'F3', 'Fz', 'F4', 'F8', 'T3', 'C3', 'Cz', 'C4', 'T4', 'T5', 'P3', 'Pz', 'P4', 'T6', 'O1', 'O2'],
+    'classes': ['music', 'noise'],
+    'non_task_classes': ['resting'],
+    'sampling_rate': 1000,
+    'montage': 'standard_1020',
+    'tmin': 0,
+    'duration': 9.5,
+    'reference': '',
+    'subjects': 21,
+    'runs_training': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+
+    'subject_training_files': fids['AuditoryProcessing training'],
+    'subject_training_pattern': lambda subject: f'P{subject}_BCMI_frontHN_2017.mat',
+
+    'metadata': fids['AuditoryProcessing metadata'],
+    'directory': 'databases/Auditory_processing',
+}

@@ -14,6 +14,7 @@ Navigation
    notebooks/05-processing
    notebooks/06-distutils
    notebooks/07-visualizations
+   notebooks/08-utils
 
 
 Indices and tables
