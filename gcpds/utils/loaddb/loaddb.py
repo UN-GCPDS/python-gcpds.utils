@@ -387,20 +387,21 @@ class AuditoryProcessing(Database):
         super().get_run(run, classes, channels, reject_bad_trials)
         
         data = []
-        classes_tempo = []
         classes_out = []
 
         for class_ in classes:
             ## self.metadata['classes'][class_]
-            data.append(self.data[self.metadata['classes'][class_]][0][0][0])
-            classes_tempo.extend(self.data[self.metadata['classes'][class_]][0][0][1][0])
-            classes_out.extend([class_]*self.data[self.metadata['classes'][class_]][0][0][1][0].size)
+            
+            cls_base = self.metadata['classes'][class_][:self.metadata['classes'][class_].find('-')]
+            cls = self.metadata['classes'][class_]
+            all_ = np.array([f'{cls_base}-{tempo}' for tempo in self.data[cls_base][0][0][1][0]])
+            
+            data.append(self.data[cls_base][0][0][0].T[all_==cls])
+            classes_out.extend([class_] * self.data[cls_base][0][0][0].T[all_==cls].shape[0])
             
         run = np.concatenate(data)
-        run = np.moveaxis(run, 2, 1)
-        run = np.moveaxis(run, 0, 2)
-
-        return run[:, channels - 1, :], np.array([classes_out, classes_tempo]).T
+        
+        return run[:, channels - 1, :], np.array(classes_out)
 
 
     # ----------------------------------------------------------------------
