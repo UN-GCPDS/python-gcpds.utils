@@ -410,7 +410,7 @@ class AuditoryProcessing(Database):
         non_task_classes = self.format_non_class_selector(non_task_classes)
         #runs = self.format_runs(runs)
 
-        return np.array([self.data['base'].T])
+        return np.array([[self.data['base'].T]])
 
 
 
