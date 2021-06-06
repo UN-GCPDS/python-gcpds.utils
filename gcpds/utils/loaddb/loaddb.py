@@ -109,7 +109,7 @@ class GIGA_MI_ME(Database):
             return None, None
 
         # Select only EEG channels
-        run = np.array(trials)[:, :len(self.metadata['channel_names']), :]
+        run = np.array(trials)[:, :len(self.metadata['channels']), :]
 
         # Select channels
         run = run[:, channels - 1, :]

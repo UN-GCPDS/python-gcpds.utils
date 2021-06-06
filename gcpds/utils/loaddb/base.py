@@ -93,7 +93,8 @@ def download_metadata(path, metadata):
     for file in metadata:
         fid, size = metadata[file]
         gdd.download_file_from_google_drive(file_id=fid,
-                                            dest_path=os.path.join(path, file),
+                                            dest_path=os.path.join(
+                                                path, file),
                                             unzip=False,
                                             overwrite=True,
                                             size=size)
@@ -103,7 +104,7 @@ def download_metadata(path, metadata):
 # def get_menmap_filename():
     # """"""
     # filename = ''.join([random.choice(string.ascii_lowercase)
-                        # for i in range(16)])
+        # for i in range(16)])
     # return f'{filename}.menmap'
 
 
@@ -131,8 +132,8 @@ class Database(metaclass=ABCMeta):
         lines = []
         lines.append('#' * 50)
         lines.append(f'{self.__class__.__name__}')
-        lines.append('#' * 50)
-        lines.append(f"Channels: {self.metadata['channel_names']}")
+        lines.append('-' * 50)
+        lines.append(f"Channels: {self.metadata['channels']}")
         lines.append(f"Sampling rate: {self.metadata['sampling_rate']} Hz")
         lines.append(f"Montage: {self.metadata['montage']}")
         lines.append(f"Subjects: {self.metadata['subjects']}")
@@ -178,7 +179,7 @@ class Database(metaclass=ABCMeta):
 
         # filename = os.path.join(self.path, get_menmap_filename())
         # fp = np.memmap(filename, dtype=array.dtype,
-                       # mode='w+', shape=array.shape)
+        # mode='w+', shape=array.shape)
         # fp[:] = array[:]
         # del array, fp
         # mmap = np.memmap(filename, mode='r')
@@ -219,19 +220,19 @@ class Database(metaclass=ABCMeta):
 
             # start = 0
             # for _ in range(self.runs):
-                # r, c = self.get_run(start, classes=classes, channels=channels,
-                                    # reject_bad_trials=reject_bad_trials)
-                # if not r is None:
-                    # break
-                # else:
-                    # start += 1
+            # r, c = self.get_run(start, classes=classes, channels=channels,
+            # reject_bad_trials=reject_bad_trials)
+            # if not r is None:
+            # break
+            # else:
+            # start += 1
 
             # for run in range(start + 1, self.runs):
-                # r_, c_ = self.get_run(
-                    # run, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials)
-                # if not r_ is None:
-                    # r = np.concatenate([r, r_], axis=0)
-                    # c = np.concatenate([c, c_])
+            # r_, c_ = self.get_run(
+            # run, classes=classes, channels=channels, reject_bad_trials=reject_bad_trials)
+            # if not r_ is None:
+            # r = np.concatenate([r, r_], axis=0)
+            # c = np.concatenate([c, c_])
 
             # return r, c
 
@@ -245,10 +246,11 @@ class Database(metaclass=ABCMeta):
         """
 
         if channels != ALL:
-            channels = [(list(map(str.lower, self.metadata['channel_names'])).index(
+            channels = [(list(map(str.lower, self.metadata['channels'])).index(
                 ch.lower()) + 1) if isinstance(ch, str) else (ch) for ch in channels]
         else:
-            channels = list(range(1, len(self.metadata['channel_names']) + 1))
+            channels = list(
+                range(1, len(self.metadata['channels']) + 1))
 
         return np.array(channels)
 
@@ -287,22 +289,23 @@ class Database(metaclass=ABCMeta):
         """"""
         # # Remove channels that not correspond with the montage
         # montage = mne.channels.make_standard_montage(self.metadata['montage'])
-        # channels_names = set(self.metadata['channel_names']).intersection(
-            # set(montage.ch_names))
-        # channels_missings = set(self.metadata['channel_names']).difference(
-            # set(montage.ch_names))
+        # channels_names = set(self.metadata['channels']).intersection(
+        # set(montage.ch_names))
+        # channels_missings = set(self.metadata['channels']).difference(
+        # set(montage.ch_names))
 
         # if channels_missings:
-            # logging.warning(
-                # f"Missing {channels_missings} channels in {self.metadata['montage']} montage.\n"
-                # f"Missing channels will be removed from MNE Epochs")
+        # logging.warning(
+        # f"Missing {channels_missings} channels in {self.metadata['montage']} montage.\n"
+        # f"Missing channels will be removed from MNE Epochs")
 
-        montage = mne.channels.make_standard_montage(self.metadata['montage'])
+        montage = mne.channels.make_standard_montage(
+            self.metadata['montage'])
 
         # Channels names with the MNE standard capitalization
 
         if channels == ALL:
-            source = self.metadata['channel_names']
+            source = self.metadata['channels']
         else:
             source = channels
 
@@ -371,7 +374,8 @@ class GIGA_BCI(Database):
                 subject, run + 1)
 
             if os.path.split(filename_subject)[-1] not in self.metadata[f'subject_files'].keys():
-                raise Exception(f"Subject {subject} not in list of subjects.")
+                raise Exception(
+                    f"Subject {subject} not in list of subjects.")
 
             fid, size = self.metadata[f'subject_files'][os.path.split(
                 filename_subject)[-1]]
@@ -389,7 +393,8 @@ class GIGA_BCI(Database):
             fid, size = self.metadata[f'subject_files'][os.path.split(
                 filename_artifact)[-1]]
 
-            artifacts.append(load_mat(self.path, filename_artifact, fid, size))
+            artifacts.append(
+                load_mat(self.path, filename_artifact, fid, size))
 
         return sessions, artifacts
 
@@ -475,7 +480,8 @@ class PhysioNet(Database):
                 subject, run)
 
             if os.path.split(filename_subject)[-1] not in self.metadata[f'subject_files'].keys():
-                raise Exception(f"Subject {subject} not in list of subjects.")
+                raise Exception(
+                    f"Subject {subject} not in list of subjects.")
 
             fid, size = self.metadata[f'subject_files'][os.path.split(
                 filename_subject)[-1]]
