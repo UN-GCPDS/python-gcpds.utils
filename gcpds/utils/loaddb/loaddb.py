@@ -1,10 +1,11 @@
 
-from .base import Database, GIGA_BCI, PhysioNet, ALL
+from .base import Database, GIGA_BCI, ALL
 from typing import Optional, Tuple
 import numpy as np
 from . import databases
 import warnings
 import logging
+import os
 
 
 # ----------------------------------------------------------------------
@@ -21,7 +22,7 @@ def deprecated(replace):
 ########################################################################
 class GIGA_MI_ME(Database):
     """"""
-    metadata = databases.giga
+    metadata = databases.giga_mi_me
 
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
@@ -168,7 +169,7 @@ class GIGA_MI_ME(Database):
 ########################################################################
 class BCI_CIV_2a(Database):
     """"""
-    metadata = databases.bci2a
+    metadata = databases.bci_civ_2a
 
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
@@ -195,8 +196,8 @@ class BCI_CIV_2a(Database):
         run = np.array([self.data[3 + run][0][0][0][start:start + end]
                         for start in starts])
 
-        # Remove EOG
-        run = run[:, :, : 22]
+        # # Remove EOG
+        # run = run[:, :, : 22]
 
         # Select channels
         run = run[:, :, channels - 1]
@@ -221,12 +222,13 @@ class BCI_CIV_2a(Database):
 ########################################################################
 class HighGamma_ME(Database):
     """"""
-    metadata = databases.highgamma
+    metadata = databases.highgamma_me
 
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
         """"""
         data = super().load_subject(subject, mode)
+        # self.runs = self.metadata[f'runs_{mode}'][subject - 1]
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
@@ -262,7 +264,7 @@ class HighGamma_ME(Database):
 ########################################################################
 class GIGA_BCI_MI(GIGA_BCI):
     """"""
-    metadata = databases.bciilliteracy_mi
+    metadata = databases.giga_bci_mi
 
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
@@ -280,7 +282,7 @@ class GIGA_BCI_MI(GIGA_BCI):
 ########################################################################
 class GIGA_BCI_ERP(GIGA_BCI):
     """"""
-    metadata = databases.bciilliteracy_erp
+    metadata = databases.giga_bci_erp
 
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
@@ -298,7 +300,7 @@ class GIGA_BCI_ERP(GIGA_BCI):
 ########################################################################
 class GIGA_BCI_SSVEP(GIGA_BCI):
     """"""
-    metadata = databases.bciilliteracy_ssvep
+    metadata = databases.giga_bci_ssvep
 
     # ----------------------------------------------------------------------
     def load_subject(self, subject: int, mode: str = 'training') -> None:
@@ -314,9 +316,9 @@ class GIGA_BCI_SSVEP(GIGA_BCI):
 
 
 ########################################################################
-class PhysioNet_MI_ME(PhysioNet):
+class PhysioNet_MI_ME(Database):
     """"""
-    metadata = databases.physionet_mmi
+    metadata = databases.physionet_mi_me
 
     # ----------------------------------------------------------------------
     def __init__(self, path: Optional[str] = None) -> None:
@@ -338,9 +340,44 @@ class PhysioNet_MI_ME(PhysioNet):
         }
 
     # ----------------------------------------------------------------------
-    def load_subject(self, subject: int, mode: 'str' = 'training', classes: Optional[list] = ALL) -> None:
+    def load_subject(self, subject: int, mode: str, classes: list) -> None:
         """"""
-        self.data_ = super().load_subject(subject, mode, classes)
+        if not mode in ['training', 'evaluation']:
+            raise Exception(
+                f"No mode {mode} available, only 'training', 'evaluation'")
+
+        self.runs = self.metadata[f'runs'][subject - 1]
+
+        if self.path is None:
+            self.path = self.metadata['directory']
+
+        if classes != ALL:
+            classes_runs = set(np.concatenate(
+                [self.classes[cls][0] for cls in classes]).tolist())
+
+        sessions = []
+        for run in range(1, 15):
+
+            if classes != ALL and (run not in classes_runs):
+                sessions.append([])
+                continue
+
+            filename_subject = self.metadata[f'subject_pattern'](
+                subject, run)
+
+            if os.path.split(filename_subject)[-1] not in self.metadata[f'subject_files'].keys():
+                raise Exception(
+                    f"Subject {subject} not in list of subjects.")
+
+            fid, size = self.metadata[f'subject_files'][os.path.split(
+                filename_subject)[-1]]
+
+            self.subject = subject
+            self.mode = mode
+
+            sessions.append(load_mat(self.path, filename_subject, fid, size))
+
+        self.data_ = sessions
 
     # ----------------------------------------------------------------------
     def get_run(self, run: int, classes: Optional[list] = ALL, channels: Optional[list] = ALL, reject_bad_trials: Optional[bool] = True) -> Tuple[np.ndarray, np.ndarray]:
@@ -366,8 +403,8 @@ class PhysioNet_MI_ME(PhysioNet):
         run = np.concatenate(data)
 
         return run[:, channels - 1, :], np.array(classes_out)
-    
-    
+
+
 
 ########################################################################
 class AuditoryProcessing(Database):
@@ -385,22 +422,22 @@ class AuditoryProcessing(Database):
         classes = self.format_class_selector(classes)
         channels = self.format_channels_selectors(channels)
         super().get_run(run, classes, channels, reject_bad_trials)
-        
+
         data = []
         classes_out = []
 
         for class_ in classes:
             ## self.metadata['classes'][class_]
-            
+
             cls_base = self.metadata['classes'][class_][:self.metadata['classes'][class_].find('-')]
             cls = self.metadata['classes'][class_]
             all_ = np.array([f'{cls_base}-{tempo}' for tempo in self.data[cls_base][0][0][1][0]])
-            
+
             data.append(self.data[cls_base][0][0][0].T[all_==cls])
             classes_out.extend([class_] * self.data[cls_base][0][0][0].T[all_==cls].shape[0])
-            
+
         run = np.concatenate(data)
-        
+
         return run[:, channels - 1, :], np.array(classes_out)
 
 
@@ -409,48 +446,10 @@ class AuditoryProcessing(Database):
         """"""
         channels = self.format_channels_selectors(channels)
         non_task_classes = self.format_non_class_selector(non_task_classes)
-        #runs = self.format_runs(runs)
+        runs = self.format_runs(runs)
+        data = self.data['base'].T
 
-        return np.array([[self.data['base'].T]])
-
-
-
-########################################################################
-class GIGA(GIGA_MI_ME):
-    def __init__(self, *args, **kwargs):
-        logging.warning(
-            "'GIGA()' class will be removed, use 'GIGA_BCI()' instead")
-        super().__init__(*args, **kwargs)
+        return [[data[channels-1, :]]]
 
 
-########################################################################
-class BCI2a(BCI_CIV_2a):
-    def __init__(self, *args, **kwargs):
-        logging.warning(
-            "'BCI2a()' class will be removed, use 'BCI_CIV_2a()' instead")
-        super().__init__(*args, **kwargs)
-
-
-########################################################################
-class PhysionetMMI(PhysioNet_MI_ME):
-    def __init__(self, *args, **kwargs):
-        logging.warning(
-            "'PhysionetMMI()' class will be removed, use 'PhysioNet_MI_ME()' instead")
-        super().__init__(*args, **kwargs)
-
-
-########################################################################
-class HighGamma(HighGamma_ME):
-    def __init__(self, *args, **kwargs):
-        logging.warning(
-            "'HighGamma()' class will be removed, use 'HighGamma_MI()' instead")
-        super().__init__(*args, **kwargs)
-
-
-########################################################################
-class HighGamma_MI(HighGamma_ME):
-    def __init__(self, *args, **kwargs):
-        logging.warning(
-            "'HighGamma_MI()' class will be removed, use 'HighGamma_ME()' instead")
-        super().__init__(*args, **kwargs)
 
