@@ -18,6 +18,6 @@ def mount(shared_drive=SHARED_DRIVE, mount='drive', force_remount=False):
             f"You haven't access to {shared_drive} shared drive.")
         return
 
-    os.chdir(gcpds_drive)
-    logging.warning(
-        f"Your working directory is now the root of the shared drive '{shared_drive}'.")
+    # os.chdir(gcpds_drive)
+    # logging.warning(
+        # f"Your working directory is now the root of the shared drive '{shared_drive}'.")
