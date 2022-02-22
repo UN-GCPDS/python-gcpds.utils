@@ -36,7 +36,11 @@ extensions = [
 
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.todo',
-    'IPython.sphinxext.ipython_console_highlighting',
+
+    'nbsphinx',
+    'sphinx.ext.mathjax',
+
+    'sphinxcontrib.bibtex',
 ]
 
 naoleon_google_docstring = False
@@ -78,8 +82,8 @@ html_theme = 'alabaster'
 html_static_path = ['_static']
 
 html_theme_options = {
-    'page_width': '1080px',
-    'sidebar_width': '310px',
+    'page_width': '1280px',
+    'sidebar_width': '300px',
 
     # 'fixed_sidebar': True,
 
@@ -94,20 +98,92 @@ html_theme_options = {
 
 html_sidebars = {
     '**': [
-        #'about.html',
-        'sidebar.html',
+        # 'about.html',
         # 'globaltoc.html',
-
         'navigation.html',
         'relations.html',
         # sourcelink.html
         'searchbox.html',
-        # 'donate.html',
     ]
 }
 
+
+
 htmlhelp_basename = 'GCPDS_{{PKG_NAME}}_doc'
 
+# -- Options for LaTeX output ------------------------------------------------
+
+latex_elements = {
+    # The paper size ('letterpaper' or 'a4paper').
+    #
+    # 'papersize': 'letterpaper',
+
+    # The font size ('10pt', '11pt' or '12pt').
+    #
+    # 'pointsize': '10pt',
+
+    # Additional stuff for the LaTeX preamble.
+    #
+    # 'preamble': '',
+
+    # Latex figure (float) alignment
+    #
+    # 'figure_align': 'htbp',
+
+    # 'babel': '\\usepackage[shorthands=off]{babel}',
+
+
+}
+
+# Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (master_doc, f'{project.replace(" ", "_")}.tex',
+     project, author, 'manual'),
+]
+
+
+# -- Options for manual page output ------------------------------------------
+
+# One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, f'{project.replace(" ", "_")}', f'{project} Documentation',
+     [author], 1)
+]
+
+
+# -- Options for Texinfo output ----------------------------------------------
+
+# Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+texinfo_documents = [
+    (master_doc, project, f'{project} Documentation',
+     author, project, 'One line description of project.',
+     'Miscellaneous'),
+]
+
+
+# -- Options for Epub output -------------------------------------------------
+
+# Bibliographic Dublin Core info.
+epub_title = project
+
+# The unique identifier of the text. This can be a ISBN number
+# or the project homepage.
+#
+# epub_identifier = ''
+
+# A unique identification for the text.
+#
+# epub_uid = ''
+
+# A list of files that should not be packed into the epub file.
+epub_exclude_files = ['search.html']
+
+# -- Extension configuration -------------------------------------------------
 
 autodoc_mock_imports = [
 
@@ -125,6 +201,7 @@ todo_include_todos = True
 # html_logo = '_static/logo.svg'
 # html_favicon = '_static/favico.ico'
 
+# modindex_common_prefix = ['bci_neurofeedback.']
 
 def setup(app):
     app.add_css_file("custom.css")
@@ -133,18 +210,14 @@ def setup(app):
 highlight_language = 'none'
 html_sourcelink_suffix = ''
 
-# suppress_warnings = [
-    # 'nbsphinx',
+# nbsphinx_execute_arguments = [
+    # "--InlineBackend.figure_formats={'svg', 'pdf'}",
+    # "--InlineBackend.rc={'figure.dpi': 96}",
 # ]
 
-nbsphinx_execute_arguments = [
-    "--InlineBackend.figure_formats={'svg', 'pdf'}",
-    "--InlineBackend.rc={'figure.dpi': 96}",
-]
-
 nbsphinx_execute = 'never'
-# nbsphinx_input_prompt = 'In [%s]:'
-# nbsphinx_output_prompt = 'Out[%s]:'
+# nbsphinx_input_prompt = ' '
+# nbsphinx_output_prompt = ' '
 nbsphinx_kernel_name = 'python3'
 nbsphinx_prompt_width = '0'
 
@@ -177,9 +250,6 @@ with open('index.rst', 'w') as file:
     file.write(f"""
 .. include:: {notebooks_dir}/readme.rst
 
-Navigation
-----------
-
 .. toctree::
    :maxdepth: 2
    :name: mastertoc
@@ -187,16 +257,15 @@ Navigation
    {notebooks}
 
 
-Indices and tables
-------------------
+.. only:: html
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    Docstrings
+    ==========
+
+    * :ref:`genindex`
+    * :ref:`modindex`
+    * :ref:`search`
 
     """)
 
-os.system("jupyter nbconvert --to rst notebooks/readme.ipynb")
-os.system("jupyter nbconvert --to markdown notebooks/readme.ipynb")
-os.system("mv notebooks/readme.md ../../README.md")
-
+bibtex_bibfiles = ['refs.bib']
