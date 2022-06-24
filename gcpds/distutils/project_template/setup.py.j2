@@ -19,8 +19,10 @@ setup(
     download_url='',
 
     install_requires=[
-       {% for requiere in PKG_REQUIERES %}'{{requiere}}',
-       {% endfor %}
+       {% if PKG_REQUIERES %}
+         {% for requiere in PKG_REQUIERES %}'{{requiere}}',
+         {% endfor %}
+      {% endif %}
     ],
 
     include_package_data=True,

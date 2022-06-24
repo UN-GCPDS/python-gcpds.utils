@@ -92,13 +92,18 @@ documentation template preconfigured and 'CGPDS' as the namespace.""",
             empty=True,
         )
 
+        if requieres.strip():
+            pkg_requieres = [p.strip() for p in requieres.strip().split(',')]
+        else:
+            pkg_requieres = ''
+
         self.data = {
             'PKG_NAME': pkg_name.lower().replace(' ', '_').replace('-', '_'),
             'AUTHOR': author.title(),
             'AUTHOR_EMAIL': author_email.lower(),
             'MAINTAINER': maintainer.title(),
             'MAINTAINER_EMAIL': maintainer_email.lower(),
-            'PKG_REQUIERES': [p.strip() for p in requieres.split(',')],
+            'PKG_REQUIERES': pkg_requieres,
         }
 
         print('\n')

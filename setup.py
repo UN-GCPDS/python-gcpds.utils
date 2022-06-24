@@ -10,7 +10,7 @@ os.chdir(
 
 setup(
     name='gcpds-utils',
-    version='0.1a5',
+    version='0.1a6',
     packages=['gcpds.utils'],
     author='Yeison Cardona',
     author_email='yencardonaal@unal.edu.co',
