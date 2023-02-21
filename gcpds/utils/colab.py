@@ -3,7 +3,7 @@ import os
 import sys
 import logging
 
-SHARED_DRIVE = 'GCPDS'
+SHARED_DRIVE = 'GCPDS-Databases'
 
 
 # ----------------------------------------------------------------------
